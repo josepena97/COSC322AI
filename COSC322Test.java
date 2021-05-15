@@ -1,4 +1,3 @@
-
 package ubc.cosc322;
 
 import java.util.ArrayList;
@@ -66,27 +65,31 @@ public class COSC322Test extends GamePlayer{
 
     @Override
     public void onLogin() {
-    	System.out.println("Congratulations!!! "
-    			+ "I am called because the server indicated that the login is successful");
-    	System.out.println("The next step is to find a room and join it: "
-    			+ "the gameClient instance created in my constructor knows how!"); 
-
-    	//get room list from game client, iterate through and print
-    	List<Room> room = gameClient.getRoomList();
-    	for (int i=0; i < room.size(); i++) {
-    		System.out.println(i + ": " + room.get(i).getName());
+//    	System.out.println("Congratulations!!! "
+//    			+ "I am called because the server indicated that the login is successful");
+//    	System.out.println("The next step is to find a room and join it: "
+//    			+ "the gameClient instance created in my constructor knows how!"); 
+//
+//    	//get room list from game client, iterate through and print
+//    	List<Room> room = gameClient.getRoomList();
+//    	for (int i=0; i < room.size(); i++) {
+//    		System.out.println(i + ": " + room.get(i).getName());
+//    	}
+//    	//user defines preferred room to join
+//    	System.out.println("Which room number would you like to join?");
+//    	Scanner scan = new Scanner(System.in);
+//    	int want = scan.nextInt();
+//    	while (want < 0 || want > 18) {
+//    		System.out.println("Invalid input. Try again.");
+//    		want = scan.nextInt();
+//        }
+//    	//join relevant room
+//    	gameClient.joinRoom(room.get(want).getName());
+//    	scan.close();
+    	userName = gameClient.getUserName();
+    	if(gamegui != null) {
+    		gamegui.setRoomInformation(gameClient.getRoomList());
     	}
-    	//user defines preferred room to join
-    	System.out.println("Which room number would you like to join?");
-    	Scanner scan = new Scanner(System.in);
-    	int want = scan.nextInt();
-    	while (want < 0 || want > 18) {
-    		System.out.println("Invalid input. Try again.");
-    		want = scan.nextInt();
-        }
-    	//join relevant room
-    	gameClient.joinRoom(room.get(want).getName());
-    	scan.close();
     }
 
     @Override
@@ -95,6 +98,7 @@ public class COSC322Test extends GamePlayer{
     	if(messageType.equalsIgnoreCase(GameMessage.GAME_STATE_BOARD)) {
     		ArrayList<Integer> gameState = 
     				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+    		gamegui.setGameState(gameState);
     		printGameState(gameState);
     	}
     	else if(messageType.equalsIgnoreCase(GameMessage.GAME_ACTION_START)) {
@@ -112,6 +116,7 @@ public class COSC322Test extends GamePlayer{
     				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.Queen_POS_NEXT);
     		ArrayList<Integer> arrow = 
     				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
+    		gamegui.updateGameState(queenCurr, queenNext, arrow);
     		System.out.println("The current Queen position is: " + queenCurr);
     		System.out.println("The next Queen position is: " + queenNext);
     		System.out.println("The arrow position is: " + arrow);
@@ -160,6 +165,4 @@ public class COSC322Test extends GamePlayer{
 		// TODO Auto-generated method stub
     	gameClient = new GameClient(userName, passwd, this);			
 	}
-
- 
-}//end of class
+}
