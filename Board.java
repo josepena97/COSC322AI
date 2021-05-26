@@ -17,6 +17,7 @@ public class Board {
 	public static final int[] W_POS = {78, 87, 114, 117};
 	
 	protected int[] board;
+	protected Moves move;
 	
 	//constructors
 	//basic constructor
@@ -26,6 +27,7 @@ public class Board {
 			board[B_POS[i]] = 1;
 			board[W_POS[i]] = 2;
 		}
+		move = new Moves();
 	}
 	
 	//cloning constructor
@@ -64,8 +66,8 @@ public class Board {
 	}
 	
 	//sets tile at row, col to specified value
-	public void setTile(int row, int col, int val) {
-		board[row*11+col] = val;
+	public void setTile(int row, int col, int value) {
+		board[row*11+col] = value;
 	}
 	
 	//sets tile based on 1D CLI input number
@@ -81,10 +83,30 @@ public class Board {
 	
 	//moves piece
 	public void movePiece(int[] queenStartLoc, int[] queenFinLoc, int[] arrowLoc, int colour) {
-		//CHECK if the move is valid!!!!!!!!!!
-		setTile(queenStartLoc[0], queenStartLoc[1], 0);
-		setTile(queenFinLoc[0], queenFinLoc[1], colour);
-		setTile(arrowLoc[0], arrowLoc[1], POS_ARROW);		
+		if (move.validMove(this,queenStartLoc,queenFinLoc) && move.validMove(this, queenFinLoc, arrowLoc)) {
+			setTile(queenStartLoc[0], queenStartLoc[1], 0);
+			setTile(queenFinLoc[0], queenFinLoc[1], colour);
+			setTile(arrowLoc[0], arrowLoc[1], POS_ARROW);
+		}else 
+			System.out.println("Invalid move! Move not completed");
+	}
+	
+	public void randomMove() {
+		//creates a random move based on piece positions and valid moves
+	}
+	
+	//return row, col positions of pieces of specified colour
+	public int[][] getPositions(int colour) {
+		int[][] pos = new int[4][2];
+		int count = 0;
+		for (int i = 12; i < N; i++) {
+			if (board[i] == colour) {
+				pos[count][0] = i/11;
+				pos[count][1] = i%11;
+				count++;
+			}
+		}
+		return pos;
 	}
 	
 	//method to convert board to printable string
