@@ -75,24 +75,73 @@ public class Board {
 		board[index-1] = value;
 	}
 	
-	//checks for winner in current game COMPLETE THIS
-	public int checkWin() {
+	//checks for winner in current game VALIDATE THIS
+	public boolean checkWin(int colour) {
+		int[][] pieces = this.getPositions(colour);
+		for(int i = 0; i < 4; i++) {
+			int[] moves = move.getMoves(this, pieces[i]);
+			for (int j = 0; j < 8; j++) {
+				if (moves[j] > 0)
+					return false;
+			}
+		}
 		//if the array of possible moves for the player is empty - then the other team wins! Booooooo, or yay?
-		return 0;
+		if (colour == 1)
+			System.out.println("Winner is: White");
+		else
+			System.out.println("Winner is: Black");
+		return true;
 	}
 	
 	//moves piece
 	public void movePiece(int[] queenStartLoc, int[] queenFinLoc, int[] arrowLoc, int colour) {
-		if (move.validMove(this,queenStartLoc,queenFinLoc) && move.validMove(this, queenFinLoc, arrowLoc)) {
-			setTile(queenStartLoc[0], queenStartLoc[1], 0);
-			setTile(queenFinLoc[0], queenFinLoc[1], colour);
-			setTile(arrowLoc[0], arrowLoc[1], POS_ARROW);
+		Board temp = new Board(this);
+		if (move.validMove(temp, queenStartLoc, queenFinLoc)) {
+			temp.setTile(queenStartLoc[0], queenStartLoc[1], 0);
+			temp.setTile(queenFinLoc[0], queenFinLoc[1], colour);
+			if (move.validMove(temp, queenFinLoc, arrowLoc)) {
+				temp.setTile(arrowLoc[0], arrowLoc[1], POS_ARROW);
+				this.clone(temp);
+			}else {
+				System.out.println("Invalid arrow move! Move not completed");//end game
+			}
 		}else 
-			System.out.println("Invalid move! Move not completed");
+			System.out.println("Invalid queen move! Move not completed");//end game
 	}
 	
-	public void randomMove() {
+	public void randomMove(int colour) {
 		//creates a random move based on piece positions and valid moves
+		while (!this.checkWin(colour)) {
+			int piece = (int) Math.floor(Math.random()*4); //CONTINUE: need to pick a new piece if the piece has no valid moves
+			int[][] pos = this.getPositions(colour);
+			Board temp = new Board(this);
+			int[] queen = random(temp, colour, pos[piece]);
+			temp.setTile(pos[piece][0], pos[piece][1], 0);
+			temp.setTile(queen[0], queen[1], colour);
+			int[] arrow = random(temp, colour, queen);
+			movePiece(pos[piece], queen, arrow, colour);
+		}
+	}
+	
+	public int[] random(Board board, int colour, int[] pos) {
+		int[] valid = move.getMoves(board, pos);
+		int howFar = 0;
+		int direction;
+		do {
+			direction = (int) Math.floor(Math.random()*8);
+			howFar = (int) Math.floor(Math.random()*(valid[direction]+1));
+		}
+		while (howFar == 0);
+		int[] queen = new int[2];
+		if (direction == Moves.N) {queen[0] = pos[0]-howFar; queen[1] = pos[1];}
+		else if (direction == Moves.NE) {queen[0] = pos[0]-howFar; queen[1] = pos[1]+howFar;}
+		else if (direction == Moves.E) {queen[0] = pos[0]; queen[1] = pos[1]+howFar;}
+		else if (direction == Moves.SE) {queen[0] = pos[0]+howFar; queen[1] = pos[1]+howFar;}
+		else if (direction == Moves.S) {queen[0] = pos[0]+howFar; queen[1] = pos[1];}
+		else if (direction == Moves.SW) {queen[0] = pos[0]+howFar; queen[1] = pos[1]-howFar;}
+		else if (direction == Moves.W) {queen[0] = pos[0]; queen[1] = pos[1]-howFar;}
+		else if (direction == Moves.NW) {queen[0] = pos[0]-howFar; queen[1] = pos[1]-howFar;}
+		return queen;
 	}
 	
 	//return row, col positions of pieces of specified colour
