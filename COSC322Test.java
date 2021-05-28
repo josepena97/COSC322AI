@@ -162,8 +162,8 @@ public class COSC322Test extends GamePlayer{
     		System.out.println("The next Queen position is: " + queenNext);
     		System.out.println("The blocking arrow position is: " + arrow);
     		int[] queen1 = queenCurr.stream().mapToInt(i -> i).toArray();
-    		int[] queen2 = queenCurr.stream().mapToInt(i -> i).toArray();
-    		int[] arrow2 = queenCurr.stream().mapToInt(i -> i).toArray();
+    		int[] queen2 = queenNext.stream().mapToInt(i -> i).toArray();
+    		int[] arrow2 = arrow.stream().mapToInt(i -> i).toArray();
     		myBoard.movePiece(queen1, queen2, arrow2, colour);
     		this.gamegui.updateGameState(msgDetails);
 //    		if(moving) {
