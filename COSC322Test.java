@@ -1,6 +1,8 @@
+
 package ubc.cosc322;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -25,7 +27,7 @@ public class COSC322Test extends GamePlayer{
 	
     private String userName = null;
     private String passwd = null;
- 
+    private int colour;
 	
     /**
      * The main method
@@ -91,36 +93,75 @@ public class COSC322Test extends GamePlayer{
     		gamegui.setRoomInformation(gameClient.getRoomList());
     	}
     }
+    public void sendPlay(int qr1, int qc1, int qr2, int qc2, int ar, int ac) {
+    	ArrayList<Integer> queenStart = new ArrayList<Integer>();
+    	queenStart.add(qr1);
+    	queenStart.add(qc1);
+    	ArrayList<Integer> queenEnd = new ArrayList<Integer>();
+    	queenStart.add(qr2);
+    	queenStart.add(qc2);
+    	ArrayList<Integer> arrow = new ArrayList<Integer>();
+    	queenStart.add(ar);
+    	queenStart.add(ac);
+    	this.gameClient.sendMoveMessage(queenStart, queenEnd, arrow);
+    	this.gamegui.updateGameState(queenStart, queenEnd, arrow);
+    }
 
     @Override
     public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails) {
     	//prints parameters of each message, depending on message type
-    	if(messageType.equalsIgnoreCase(GameMessage.GAME_STATE_BOARD)) {
-    		ArrayList<Integer> gameState = 
-    				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
-    		gamegui.setGameState(gameState);
-    		printGameState(gameState);
+    	Board myBoard = new Board();
+		if(messageType.compareTo(GameMessage.GAME_STATE_BOARD)==0) {
+    		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+    		printGameState(board);
+    		this.gamegui.setGameState(board);
     	}
-    	else if(messageType.equalsIgnoreCase(GameMessage.GAME_ACTION_START)) {
-    		ArrayList<Integer> gameState = 
-    				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+    	else if(messageType.compareTo(GameMessage.GAME_ACTION_START)==0) {
+    		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+    		//The issue is here - it keeps printing "No board information - meaning it can't find the board?
+    		System.out.println("Action start message");
+    		if(board == null)
+    			System.out.println("No board information");
+    		else {
+    			printGameState(board);
+    			this.gamegui.setGameState(board);
+    		}
+    		
     		String black = (String) msgDetails.get(AmazonsGameMessage.PLAYER_BLACK);
     		String white = (String) msgDetails.get(AmazonsGameMessage.PLAYER_WHITE);
-    		printGameState(gameState);
     		System.out.println("The Black Player's name is " + black + ", and the White player's name is " + white + ".");
+    		
+    		if(black.contains(userName)) {
+    			this.colour = 1;
+    			ArrayList<Integer> play = myBoard.randomMove(colour);
+    			sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
+    			System.out.println(myBoard.toString());
+    			printGameState((ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE));//to check boards match
+    			//moving = true;
+    		}else this.colour = 2;
         }
-    	else if(messageType.equalsIgnoreCase(GameMessage.GAME_ACTION_MOVE)) {
+    	else if(messageType.compareTo(GameMessage.GAME_ACTION_MOVE)==0) {
     		ArrayList<Integer> queenCurr = 
     				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);    		
     		ArrayList<Integer> queenNext = 
     				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.Queen_POS_NEXT);
     		ArrayList<Integer> arrow = 
     				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
-    		gamegui.updateGameState(queenCurr, queenNext, arrow);
+    		System.out.println("Action move message");
     		System.out.println("The current Queen position is: " + queenCurr);
     		System.out.println("The next Queen position is: " + queenNext);
-    		System.out.println("The arrow position is: " + arrow);
-    		
+    		System.out.println("The blocking arrow position is: " + arrow);
+    		int[] queen1 = queenCurr.stream().mapToInt(i -> i).toArray();
+    		int[] queen2 = queenCurr.stream().mapToInt(i -> i).toArray();
+    		int[] arrow2 = queenCurr.stream().mapToInt(i -> i).toArray();
+    		myBoard.movePiece(queen1, queen2, arrow2, colour);
+    		this.gamegui.updateGameState(msgDetails);
+//    		if(moving) {
+//    			moving = false;
+//    			System.out.println("Ignoring own move");
+//    		} else {
+//    			System.out.println("Need to make move");
+//    		}
     	}
     	//This method will be called by the GameClient when it receives a game-related message
     	//from the server.
@@ -165,4 +206,6 @@ public class COSC322Test extends GamePlayer{
 		// TODO Auto-generated method stub
     	gameClient = new GameClient(userName, passwd, this);			
 	}
-}
+
+ 
+}//end of class
