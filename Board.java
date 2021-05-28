@@ -1,5 +1,7 @@
 package ubc.cosc322;
 
+import java.util.ArrayList;
+
 /** Code for Amazons board class - partially adapted from Billy Spelchan's TicTacToe class
  * 
  * @author Team 05: Corey, Suri, Jun, Alex, Jose
@@ -109,18 +111,37 @@ public class Board {
 			System.out.println("Invalid queen move! Move not completed");//end game
 	}
 	
-	public void randomMove(int colour) {
+	public ArrayList<Integer> randomMove(int colour) {
 		//creates a random move based on piece positions and valid moves
-		while (!this.checkWin(colour)) {
+		if(!this.checkWin(colour)) {
 			int piece = (int) Math.floor(Math.random()*4); //CONTINUE: need to pick a new piece if the piece has no valid moves
 			int[][] pos = this.getPositions(colour);
+			int sum = 0;
+			while(sum == 0) {
+				int[] moves = move.getMoves(this, pos[piece]);
+				for (int j = 0; j < 8; j++) {
+					sum += moves[j];
+				}
+				if (sum != 0) {break;}
+				piece = (int) Math.floor(Math.random()*4);
+			}
 			Board temp = new Board(this);
 			int[] queen = random(temp, colour, pos[piece]);
 			temp.setTile(pos[piece][0], pos[piece][1], 0);
 			temp.setTile(queen[0], queen[1], colour);
 			int[] arrow = random(temp, colour, queen);
 			movePiece(pos[piece], queen, arrow, colour);
+			ArrayList<Integer> ret = new ArrayList<Integer>(6);
+			ret.add(pos[piece][0]);
+			ret.add(pos[piece][1]);
+			ret.add(queen[0]);
+			ret.add(queen[0]);
+			ret.add(arrow[0]);
+			ret.add(arrow[0]);
+			return ret;
 		}
+		//else end game
+		return null;
 	}
 	
 	public int[] random(Board board, int colour, int[] pos) {
