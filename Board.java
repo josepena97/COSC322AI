@@ -135,9 +135,9 @@ public class Board {
 			ret.add(pos[piece][0]);
 			ret.add(pos[piece][1]);
 			ret.add(queen[0]);
-			ret.add(queen[0]);
+			ret.add(queen[1]);
 			ret.add(arrow[0]);
-			ret.add(arrow[0]);
+			ret.add(arrow[1]);
 			return ret;
 		}
 		//else end game
