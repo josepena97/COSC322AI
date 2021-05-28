@@ -1,4 +1,4 @@
-
+n
 package ubc.cosc322;
 
 import java.util.ArrayList;
@@ -98,11 +98,11 @@ public class COSC322Test extends GamePlayer{
     	queenStart.add(qr1);
     	queenStart.add(qc1);
     	ArrayList<Integer> queenEnd = new ArrayList<Integer>();
-    	queenStart.add(qr2);
-    	queenStart.add(qc2);
+    	queenEnd.add(qr2);
+    	queenEnd.add(qc2);
     	ArrayList<Integer> arrow = new ArrayList<Integer>();
-    	queenStart.add(ar);
-    	queenStart.add(ac);
+    	arrow.add(ar);
+    	arrow.add(ac);
     	this.gameClient.sendMoveMessage(queenStart, queenEnd, arrow);
     	this.gamegui.updateGameState(queenStart, queenEnd, arrow);
     }
@@ -119,7 +119,17 @@ public class COSC322Test extends GamePlayer{
     	else if(messageType.compareTo(GameMessage.GAME_ACTION_START)==0) {
     		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
     		//The issue is here - it keeps printing "No board information - meaning it can't find the board?
-    		System.out.println("Action start message");
+//     		ArrayList<Integer> board = new ArrayList<Integer>(121);
+//     		int[] B_POS = {15, 18, 45, 54};
+//     		int[] W_POS = {78, 87, 114, 117};
+//     		for(int i = 0; i < 121; i++)
+//     			board.add(0);
+//     		for (int i = 0; i < 4; i++) {
+//     			board.set(B_POS[i], 1);
+//     			board.set(W_POS[i], 2);
+//     		}
+// 		this.gamegui.setGameState(board); //Temp fix - makes an empty board so we can test the rest
+		System.out.println("Action start message");
     		if(board == null)
     			System.out.println("No board information");
     		else {
