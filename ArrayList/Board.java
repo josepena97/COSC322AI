@@ -26,7 +26,7 @@ public class Board {
 	//constructors
 	//basic constructor
 	public Board() {
-		board = new ArrayList<>(N);
+		board = new ArrayList<Integer>(Collections.nCopies(N,0));
 		for (int i = 0; i < 4; i++) {
 			board.set(B_POS.get(i), 1);
 			board.set(W_POS.get(i), 2);
@@ -156,15 +156,15 @@ public class Board {
 			howFar = (int) Math.floor(Math.random()*(valid.get(direction)+1));
 		}
 		while (howFar == 0);
-		ArrayList<Integer> queen = new ArrayList<Integer>(2);
-		if (direction == Moves.N) {queen.set(0, pos.get(0)-howFar); queen.set(1, pos.get(1));}
-		else if (direction == Moves.NE) {queen.set(0, pos.get(0)-howFar); queen.set(1, pos.get(1)+howFar);}
-		else if (direction == Moves.E) {queen.set(0, pos.get(0)); queen.set(1, pos.get(1)+howFar);}
-		else if (direction == Moves.SE) {queen.set(0, pos.get(0)+howFar); queen.set(1, pos.get(1)+howFar);}
-		else if (direction == Moves.S) {queen.set(0, pos.get(0)+howFar); queen.set(1, pos.get(1));}
-		else if (direction == Moves.SW) {queen.set(0, pos.get(0)+howFar); queen.set(1, pos.get(1)-howFar);}
-		else if (direction == Moves.W) {queen.set(0, pos.get(0)); queen.set(1, pos.get(1)-howFar);}
-		else if (direction == Moves.NW) {queen.set(0, pos.get(0)-howFar); queen.set(1, pos.get(1)-howFar);}
+		ArrayList<Integer> queen = new ArrayList<Integer>();
+		if (direction == Moves.N) {queen.add(pos.get(0)-howFar); queen.add(pos.get(1));}
+		else if (direction == Moves.NE) {queen.add(pos.get(0)-howFar); queen.add(pos.get(1)+howFar);}
+		else if (direction == Moves.E) {queen.add(pos.get(0)); queen.add(pos.get(1)+howFar);}
+		else if (direction == Moves.SE) {queen.add(pos.get(0)+howFar); queen.add(pos.get(1)+howFar);}
+		else if (direction == Moves.S) {queen.add(pos.get(0)+howFar); queen.add(pos.get(1));}
+		else if (direction == Moves.SW) {queen.add(pos.get(0)+howFar); queen.add(pos.get(1)-howFar);}
+		else if (direction == Moves.W) {queen.add(pos.get(0)); queen.add(pos.get(1)-howFar);}
+		else if (direction == Moves.NW) {queen.add(pos.get(0)-howFar); queen.add(pos.get(1)-howFar);}
 		return queen;
 	}
 	
@@ -174,8 +174,9 @@ public class Board {
 		int count = 0;
 		for (int i = 12; i < N; i++) {
 			if (board.get(i) == colour) {
-				pos.get(count).set(0, i/11);
-				pos.get(count).set(1, i%11);
+				int row = i/11;
+				int column = i%11;
+				pos.add(new ArrayList<Integer>(Arrays.asList(i/11, i%11)));
 				count++;
 			}
 		}

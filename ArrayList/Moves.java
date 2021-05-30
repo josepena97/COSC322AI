@@ -1,6 +1,7 @@
 package ubc.cosc322;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Moves {
 	
@@ -18,7 +19,7 @@ public class Moves {
 	
 	//creates a move object that holds an empty array of moves
 	public Moves() {
-		valid = new ArrayList<Integer>(8);
+		valid = new ArrayList<Integer>(Collections.nCopies(8, 0));
 	}
 	
 	//returns an array of the number of spaces that can be moved in each direction, clockwise from N
