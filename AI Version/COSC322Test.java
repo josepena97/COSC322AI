@@ -23,7 +23,7 @@ public class COSC322Test extends GamePlayer{
 
     private GameClient gameClient = null; 
     private BaseGameGUI gamegui = null;
-	private recursiveAI player = null;
+	private RecursiveAI player = null;
     
     private String userName = null;
     private String passwd = null;
@@ -116,7 +116,7 @@ public class COSC322Test extends GamePlayer{
     	if(messageType.compareTo(GameMessage.GAME_STATE_BOARD)==0) {
     		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
     		myBoard = new Board();
-        	this.player = new recursiveAI(myBoard);
+        	this.player = new RecursiveAI(myBoard);
     		System.out.println(myBoard.toString());
 			this.gamegui.setGameState(myBoard.getBoard());
     	}

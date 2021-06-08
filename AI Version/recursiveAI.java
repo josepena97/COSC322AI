@@ -3,16 +3,16 @@ package ubc.cosc322;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class recursiveAI extends Board {
+public class RecursiveAI extends Board {
 
-    recursiveAI parent = null;
+    RecursiveAI parent = null;
     Board board = null;
 
-    recursiveAI(Board board) {
+    RecursiveAI(Board board) {
         super();
         this.board = board;
     }
-    recursiveAI(recursiveAI parent, Board board) {
+    RecursiveAI(RecursiveAI parent, Board board) {
         super(parent);
         this.parent = parent;
     }
@@ -25,7 +25,7 @@ public class recursiveAI extends Board {
 //    	ArrayList<Integer> arrow = ai(queenCurr, mode, colour);
 //    	super.movePiece(queenCurr, queenNext, arrow, colour);
 //    }
-
+    
     public ArrayList<Integer> ai(int colour) {
     	if (super.counter < 15) {
     		return firstAI(colour);
@@ -45,28 +45,50 @@ public class recursiveAI extends Board {
     	ArrayList<Integer> Aloc = null;
     	int whichQueen = 0;
     	int overallmin = Integer.MAX_VALUE;
+    	
+    	//System.out.println(Arrays.deepToString(queenCurr.toArray()));
     	for (int f = 0; f < 4; f++ ) {	
-    		ArrayList<Integer> queenmoves = super.move.getMoves(this, queenCurr.get(f)); 
+    		ArrayList<Integer> queenmoves = super.move.getMoves(this, queenCurr.get(f));
+    		//System.out.println("\n" + f + "-> QUEEN:  ");
+        	//System.out.println(Arrays.deepToString(queenCurr.get(f).toArray()) + ":  ");
+        	//System.out.println(Arrays.deepToString(queenmoves.toArray()));
+
 	    	for (int i = 0; i < 8; i++) { //for each direction
-	    		for (int j = 0; j < queenmoves.get(i); j++) { //for each possible move
-	    			Board brd = super.getBoardObject();
+	    		for (int j = 1; j <= queenmoves.get(i); j++) { //for each possible move
+	    			//System.out.println("Moving " + i + ", " + j + "times");
+
+	    			Board brd = new Board();
+	    			brd.clone(this);
+	    			//System.out.println("Cloning the board: \n" + brd.toString());
 	    			//track what the move is
 	    			ArrayList<Integer> newQueen = whereTo(i, queenCurr.get(f), j);
-	    			ArrayList<Integer> arrowmoves = brd.move.getMoves(this, newQueen);
-	    			for (int k = 0; k < 8; k++) {
-	    				for (int l = 0; l < arrowmoves.get(k); l++) { //for each possible move
-	    					Board brd2 = super.getBoardObject();
+	    	    	//System.out.println("New Queen position: " + Arrays.deepToString(newQueen.toArray()));
+
+	    			
+	    			brd.setTile(queenCurr.get(f).get(0), queenCurr.get(f).get(1), 0);
+	    			brd.setTile(newQueen.get(0), newQueen.get(1), colour);
+	    			//System.out.println("Move on cloned board from " + queenCurr.get(f).get(0) + ", " + queenCurr.get(f).get(1)
+	    			//					+ " to " + newQueen.get(0) + "," + newQueen.get(1) + "\n" + brd.toString());
+
+	    			ArrayList<Integer> arrowmoves = brd.move.getMoves(brd, newQueen);
+	    			for (int k = 0; k < 8; k++) { 
+	    				for (int l = 1; l <= arrowmoves.get(k); l++) { //for each possible move
+	    					Board brd2 = new Board();
+	    					brd2.clone(this);
 	    					ArrayList<Integer> newArrow =  whereTo(k, newQueen, l);
 	    					brd2.movePiece(queenCurr.get(f), newQueen, newArrow, colour);
+	    	    			//System.out.println("Arrow number " + k + ": \n" + brd2.toString());
+
 	    					ArrayList<ArrayList<Integer>> opp = getOppPos(colour);
 	    					int min = Integer.MAX_VALUE;
 	    					for (int m = 0; m < 4; m++) {
 	    						ArrayList<Integer> oppmoves = brd2.move.getMoves(brd2, opp.get(m));
-	    						int innersum = 0;
+		    			    	//System.out.println(Arrays.deepToString(opp.get(m).toArray()));
+	    				    	//System.out.println(Arrays.deepToString(oppmoves.toArray()));
+
 	    						for (int p = 0; p < 8; p++) {
-	    							innersum += oppmoves.get(p);
+	    							min += oppmoves.get(p);
 	    						}
-	    						if (innersum < min) min = innersum;
 	    					}
 	    					if (min < overallmin) {
 	    						overallmin = min;
@@ -80,7 +102,15 @@ public class recursiveAI extends Board {
 	    	}
     	}
     	super.movePiece(queenCurr.get(whichQueen), Qloc, Aloc, colour);
-    	return (ArrayList<Integer>) (Arrays.asList(queenCurr.get(whichQueen).get(0), queenCurr.get(whichQueen).get(1), Qloc.get(0), Qloc.get(1), Aloc.get(0), Aloc.get(1)));
+    	ArrayList<Integer> play = new ArrayList<Integer>();
+    	play.add(queenCurr.get(whichQueen).get(0)); 
+    	play.add(queenCurr.get(whichQueen).get(1));
+    	play.add(Qloc.get(0));
+    	play.add(Qloc.get(1));
+    	play.add(Aloc.get(0));
+    	play.add(Aloc.get(1));
+    	
+    	return play;
    }
     
     // extend firstAI to further levels
@@ -94,7 +124,7 @@ public class recursiveAI extends Board {
     }
     
     public ArrayList<Integer> whereTo(int direction, ArrayList<Integer> pos, int howFar) {
-    	ArrayList<Integer> newpos = pos;
+    	ArrayList<Integer> newpos = new ArrayList<Integer>();
 		if (direction == Moves.N) {newpos.add(pos.get(0)-howFar); newpos.add(pos.get(1));}
 		else if (direction == Moves.NE) {newpos.add(pos.get(0)-howFar); newpos.add(pos.get(1)+howFar);}
 		else if (direction == Moves.E) {newpos.add(pos.get(0)); newpos.add(pos.get(1)+howFar);}

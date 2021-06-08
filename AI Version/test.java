@@ -1,9 +1,12 @@
 package ubc.cosc322;
 
+import java.util.ArrayList;
+
 public class test {
 	public static void main(String[] args) {
 		Board practice = new Board();
 		System.out.println(practice.toString());
+		RecursiveAI player = new RecursiveAI(practice);
 		//practice.setTile(4,5,2);
 		//practice.setTileFromCharIndex(57, 1);
 //		Board ver2 = new Board(practice);
@@ -12,7 +15,7 @@ public class test {
 //		System.out.println(practice.getTileSymbol(1,4));
 //		ver2.movePiece(new int[] {1, 7},new int[] {8,3}, new int[] {9,4}, 1);
 //		System.out.println(ver2.toString());
-		Moves move = new Moves();
+//		Moves move = new Moves();
 //		int[] queen = new int[] {10,4};
 //		int[] temp = move.getMoves(ver2, queen);
 //		System.out.println("Number of valid spaces the queen at (" + queen[0] + ", " + queen[1] + ") can move: ");
@@ -25,8 +28,23 @@ public class test {
 //		int[][] pos = practice.getPositions(1); //black positions
 //		for (int i = 0; i < 4; i++)
 //			System.out.println("(" + pos[i][0] + ", " + pos[i][1] + ")");
-		for(int i = 0; i < 75; i++) {
-			practice.randomMove(i%2+1);
+		for(int i = 0; i < 75; i++){
+			if(!practice.checkWin(1)) {
+				System.out.println("Iteration number " + (i+1));
+				player.clone(practice);
+				ArrayList<Integer> move = player.ai(1);
+				practice.clone(player);
+				System.out.println(practice.toString());
+			}else {
+				break;
+			}
+			if(!practice.checkWin(2)) {
+				practice.randomMove(2);
+				System.out.println(practice.toString());
+			}else {
+				break;
+			}
+			
 		}
 		System.out.println(practice.toString());
 		

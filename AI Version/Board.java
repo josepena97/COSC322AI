@@ -47,6 +47,7 @@ public class Board {
 	//clone method to copy board state
 	public void clone(Board source) {
 		Collections.copy(this.board, source.board);
+		counter = source.counter;
 	}
 		
 	//get tile method to convert row, col to 1d array notation
@@ -102,9 +103,9 @@ public class Board {
 		}
 		//if the array of possible moves for the player is empty - then the other team wins! Booooooo, or yay?
 		if (colour == 1)
-			System.out.println("Winner is: White");
-		else
 			System.out.println("Winner is: Black");
+		else
+			System.out.println("Winner is: Whitee");
 		return true;
 	}
 	
@@ -119,10 +120,10 @@ public class Board {
 				temp.setTile(arrowLoc.get(0), arrowLoc.get(1), POS_ARROW);
 				this.clone(temp);
 			}else {
-				System.out.println("Invalid arrow move! Move not completed");//end game
+				//System.out.println("Invalid arrow move! Move not completed");//end game
 			}
 		}else 
-			System.out.println("Invalid queen move! Move not completed");//end game
+			//System.out.println("Invalid queen move! Move not completed");//end game
 		counter++;
 	}
 	
