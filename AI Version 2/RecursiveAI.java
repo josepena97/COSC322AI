@@ -10,9 +10,8 @@ public class RecursiveAI extends Board {
     NodeGraph graph;
 
     RecursiveAI(Board board) {
-        super();
-        this.board = board;
-        graph = new NodeGraph();
+        super(board);
+        graph = new NodeGraph(board);
     }
     RecursiveAI(RecursiveAI parent, Board board) {
         super(parent);
@@ -52,11 +51,11 @@ public class RecursiveAI extends Board {
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
-//        	System.out.println(Arrays.deepToString(move.toArray()));
-    		ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
-			ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
-			ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
-			super.movePiece(oldQueen, newQueen, newArrow, colour);
+        	System.out.println(Arrays.deepToString(move.toArray()));
+//    		ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
+//			ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
+//			ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
+//			super.movePiece(oldQueen, newQueen, newArrow, colour);
     		return move;
     	}
 		return null;
@@ -126,7 +125,7 @@ public class RecursiveAI extends Board {
     	int overallmin = Integer.MAX_VALUE;
     	
     	
-    	//System.out.println(Arrays.deepToString(queenCurr.toArray()));
+    	System.out.println(Arrays.deepToString(queenCurr.toArray()));
     	for (int f = 0; f < 4; f++ ) {	
     		ArrayList<Integer> queenmoves = node.move.getMoves(node, queenCurr.get(f));
     		//DEBUGG
@@ -144,7 +143,7 @@ public class RecursiveAI extends Board {
 	    			Board brd = new Board();
 	    			brd.clone(node);
 	    			//DEBUGG
-//	    			System.out.println("Cloning the board: \n" + brd.toString());
+	    			System.out.println("Cloning the board: \n" + brd.toString());
 	    			//track what the move is
 					ArrayList<ArrayList<Integer>> oppBefore = getOppPos(colour);
 	    			int sumBefore = 0;
@@ -192,25 +191,25 @@ public class RecursiveAI extends Board {
 	    						}
 	    					}
 	    					//DEBUGG
-//	    					System.out.println("Total moves before = " + sumBefore);
-//	    					System.out.println("Total moves  after= " + sumAfter);
-//	    					System.out.println("Restricted move moves = " + (sumBefore - sumAfter));
-//	    					System.out.println("New node to add is:" 
-//	    											+ "\n-> Old Queen: " + Arrays.deepToString(queenCurr.get(f).toArray())
-//	    											+ "\n-> New Queen: " + Arrays.deepToString(newQueen.toArray())
-//	    											+ "\n-> New Arrow: " + Arrays.deepToString(newArrow.toArray())
-//	    											+ "\n-> Value: " + (sumBefore - sumAfter)
-//	    											+ "\n-> Board: " + brd2.toString()
-//	    										);
+	    					System.out.println("Total moves before = " + sumBefore);
+	    					System.out.println("Total moves  after= " + sumAfter);
+	    					System.out.println("Restricted move moves = " + (sumBefore - sumAfter));
+	    					System.out.println("New node to add is:" 
+	    											+ "\n-> Old Queen: " + Arrays.deepToString(queenCurr.get(f).toArray())
+	    											+ "\n-> New Queen: " + Arrays.deepToString(newQueen.toArray())
+	    											+ "\n-> New Arrow: " + Arrays.deepToString(newArrow.toArray())
+	    											+ "\n-> Value: " + (sumBefore - sumAfter)
+	    											+ "\n-> Board: " + brd2.toString()
+	    										);
 	    					
 	    					NodeGraph temp = new NodeGraph(queenCurr.get(f), newQueen, newArrow, (sumBefore - sumAfter), brd2, depth);
 	    					branching.add(temp);
-//	    					System.out.print("All values: \n[" );
-//	    			    	for(int z = 0; z < branching.size(); z++) {
-//	    			    		System.out.print(branching.get(z).getValue() + ", ");
-//	    			    		//System.out.print(branching.get(z).toString());
-//	    			    	}
-//	    			    	System.out.println("] \n Size = " + branching.size() + "\n\n");
+	    					System.out.print("All values: \n[" );
+	    			    	for(int z = 0; z < branching.size(); z++) {
+	    			    		System.out.print(branching.get(z).getValue() + ", ");
+	    			    		//System.out.print(branching.get(z).toString());
+	    			    	}
+	    			    	System.out.println("] \n Size = " + branching.size() + "\n\n");
 	    				}
 	    			}
 	    		}

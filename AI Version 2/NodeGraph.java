@@ -18,8 +18,7 @@ public class NodeGraph extends Board{
     }
     
     public NodeGraph(Board b) {
-        super();
-    	this.board = b.board;
+        super(b);
     }
     public NodeGraph(int val) {
     	super();

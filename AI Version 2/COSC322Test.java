@@ -171,7 +171,7 @@ public class COSC322Test extends GamePlayer{
 		    		this.gamegui.updateGameState(msgDetails);
 	    		}
     				this.player = new RecursiveAI(myBoard);
-	    			//ArrayList<Integer> play = myBoard.randomMove(myColour);
+//	    			ArrayList<Integer> play = myBoard.randomMove(myColour);
 	    			ArrayList<Integer> play = player.ai(myColour);
 	    			ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
 					ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
