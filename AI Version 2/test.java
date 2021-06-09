@@ -29,7 +29,7 @@ public class test {
 //		int[][] pos = practice.getPositions(1); //black positions
 //		for (int i = 0; i < 4; i++)
 //			System.out.println("(" + pos[i][0] + ", " + pos[i][1] + ")");
-		for(int i = 0; i < 75; i++){
+		for(int i = 0; i < 70; i++){
 			RecursiveAI player = new RecursiveAI(practice);
 
 			if(!practice.checkWin(1)) {
@@ -46,7 +46,11 @@ public class test {
 				break;
 			}
 			if(!practice.checkWin(2)) {
-				practice.randomMove(2);
+				ArrayList<Integer> move = practice.randomMove(2);
+				ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
+				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
+				ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
+				practice.movePiece(oldQueen, newQueen, newArrow, 2);
 				System.out.println(practice.toString());
 			}else {
 				break;
