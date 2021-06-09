@@ -7,6 +7,7 @@ public class test {
 	public static void main(String[] args) {
 		Board practice = new Board();
 		System.out.println(practice.toString());
+
 		//practice.setTile(4,5,2);
 		//practice.setTileFromCharIndex(57, 1);
 //		Board ver2 = new Board(practice);
@@ -30,6 +31,7 @@ public class test {
 //			System.out.println("(" + pos[i][0] + ", " + pos[i][1] + ")");
 		for(int i = 0; i < 75; i++){
 			RecursiveAI player = new RecursiveAI(practice);
+
 			if(!practice.checkWin(1)) {
 				System.out.println("Iteration number " + (i+1));
 				player.clone(practice);

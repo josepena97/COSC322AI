@@ -116,7 +116,7 @@ public class COSC322Test extends GamePlayer{
     	if(messageType.compareTo(GameMessage.GAME_STATE_BOARD)==0) {
     		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
     		myBoard = new Board();
-        	this.player = new RecursiveAI(myBoard);
+			this.player = new RecursiveAI(myBoard);
     		System.out.println(myBoard.toString());
 			this.gamegui.setGameState(myBoard.getBoard());
     	}
@@ -139,7 +139,12 @@ public class COSC322Test extends GamePlayer{
     			this.myColour = myBoard.POS_BLACK;
     			this.oppColour = myBoard.POS_WHITE;
 //    			ArrayList<Integer> play = myBoard.randomMove(myColour);
+    			this.player = new RecursiveAI(myBoard);
     			ArrayList<Integer> play = player.ai(myColour);
+    			ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
+				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
+				ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(play.get(4), play.get(5)));
+				myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
     			sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
     			System.out.println(myBoard.toString());
     			this.moving = true;
@@ -165,8 +170,13 @@ public class COSC322Test extends GamePlayer{
 		    		this.moving = false;
 		    		this.gamegui.updateGameState(msgDetails);
 	    		}
+    				this.player = new RecursiveAI(myBoard);
 	    			//ArrayList<Integer> play = myBoard.randomMove(myColour);
 	    			ArrayList<Integer> play = player.ai(myColour);
+	    			ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
+					ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
+					ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(play.get(4), play.get(5)));
+					myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
 	    			sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
 	    			System.out.println(myBoard.toString());
 	    			this.moving = true;

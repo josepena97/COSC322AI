@@ -13,12 +13,12 @@ import java.util.Collections;
 public class Board {
 	//constants
 	public static final int POS_AVAILABLE = 0;
-	public static final int POS_BLACK = 2;
-	public static final int POS_WHITE = 1;
+	public static final int POS_BLACK = 1;
+	public static final int POS_WHITE = 2;
 	public static final int POS_ARROW = 3;
 	public static final int N = 121;
-	public static final ArrayList<Integer> B_POS = new ArrayList<>(Arrays.asList(15, 18, 45, 54));
-	public static final ArrayList<Integer> W_POS = new ArrayList<>(Arrays.asList(78, 87, 114, 117));
+	public static final ArrayList<Integer> W_POS = new ArrayList<>(Arrays.asList(15, 18, 45, 54));
+	public static final ArrayList<Integer> B_POS = new ArrayList<>(Arrays.asList(78, 87, 114, 117));
 	public int counter;
 	
 	protected ArrayList<Integer> board;

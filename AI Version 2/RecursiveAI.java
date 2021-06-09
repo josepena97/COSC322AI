@@ -53,7 +53,10 @@ public class RecursiveAI extends Board {
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
 //        	System.out.println(Arrays.deepToString(move.toArray()));
-
+    		ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
+			ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
+			ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
+			super.movePiece(oldQueen, newQueen, newArrow, colour);
     		return move;
     	}
 		return null;
