@@ -6,12 +6,13 @@ import java.util.Collections;
 
 /** Code for Amazons board class - partially adapted from Billy Spelchan's TicTacToe class
  * 
- * @author Team 05: Corey, Suri, Jun, Alex, Jose
+ * @author Team 05: Corey Bond, Kshitij Suri, Jun Kang, Alex Rogov, Jose Pena
  * 5/22/2021
  */
 
 public class Board {
-	//constants
+	
+	// Constants
 	public static final int POS_AVAILABLE = 0;
 	public static final int POS_BLACK = 1;
 	public static final int POS_WHITE = 2;
@@ -24,8 +25,9 @@ public class Board {
 	protected ArrayList<Integer> board;
 	protected Moves move;
 	
-	//constructors
-	//basic constructor
+	// Constructors
+	
+	// Basic constructor
 	public Board() {
 		board = new ArrayList<Integer>(Collections.nCopies(N,0));
 		for (int i = 0; i < 4; i++) {
@@ -36,7 +38,9 @@ public class Board {
 		move = new Moves();
 	}
 	
-	//cloning constructor
+   /** Cloning constructor
+	* @param source
+	*/
 	public Board(Board source) {
 		this();
 		Collections.copy(this.board, source.board);
@@ -44,18 +48,26 @@ public class Board {
 	
 	//methods
 	
-	//clone method to copy board state
+   /** Clone method to copy board state
+	* @param source
+	*/
 	public void clone(Board source) {
 		Collections.copy(this.board, source.board);
 		counter = source.counter;
 	}
 		
-	//get tile method to convert row, col to 1d array notation
+   /** Get tile method to convert row, col to 1D array index
+	* @param row
+	* @param col
+	*/
 	public int getTile(int row, int col) {
 		return board.get(row*11+col);
 	}
 	
-	//returns symbolic representation of tile contents
+   /** Method to retrieve symbolic representation of tile contents from coordinates
+	* @param row
+	* @param col
+	*/
 	public String getTileSymbol(int row, int col) {
 		int tile = getTile(row, col);
 		if (tile == POS_BLACK) return "B";
@@ -64,33 +76,48 @@ public class Board {
 		return ""+(row*11+col+1);
 	}
 	
-	//returns symbolic representation of tile contents
-	public String getTileSymbolLinear(int pos) {
-		if (board.get(pos) == POS_BLACK) return "B";
-		if (board.get(pos) == POS_WHITE) return "W";
-		if (board.get(pos) == POS_ARROW) return "*";
+   /** Method to retrieve symbolic representation of tile contents from index
+	* @param index
+	*/
+	public String getTileSymbolLinear(int index) {
+		if (board.get(index) == POS_BLACK) return "B";
+		if (board.get(index) == POS_WHITE) return "W";
+		if (board.get(index) == POS_ARROW) return "*";
 		return "-";
 	}
 	
-	//sets tile at row, col to specified value
+   /** Method to set tile at provided row, col coordinates to specified value
+	* @param row
+	* @param col
+	* @param value
+	*/
 	public void setTile(int row, int col, int value) {
 		board.set(row*11+col, value);
 	}
 	
-	//sets tile based on 1D CLI input number
+   /** Method to set tile at provided index to specified value
+	* @param index
+	* @param value
+	*/
 	public void setTileFromCharIndex(int index, int value) {
 		board.set(index-1, value);
 	}
 	
+   /** Method to retrieve board array
+	*/
 	public ArrayList<Integer> getBoard() {
 		return this.board;
 	}
 	
+   /** Method to retrieve board object
+	*/
 	public Board getBoardObject() {
 		return this;
 	}
 	
-	//checks for winner in current game VALIDATE THIS
+   /** Method to determine if the game has a winner - based on provided player having remaining moves
+	* @param colour
+	*/
 	public boolean checkWin(int colour) {
 		ArrayList<ArrayList<Integer>> pieces = this.getPositions(colour);
 		
@@ -101,36 +128,43 @@ public class Board {
 					return false;
 			}
 		}
-		//if the array of possible moves for the player is empty - then the other team wins! Booooooo, or yay?
-		if (colour == 1)
+		
+		//if the array of possible moves for the player is empty - then the other team wins
+		if (colour == POS_WHITE)
 			System.out.println("Winner is: Black");
 		else
-			System.out.println("Winner is: Whitee");
+			System.out.println("Winner is: White");
 		return true;
 	}
 	
-	//moves piece
+   /** Method to move piece based on provided start and finish coordinates
+	* @param queenStartLoc
+	* @param queenFinLoc
+	* @param arrowLoc
+	* @param colour
+	*/
 	public void movePiece(ArrayList<Integer> queenStartLoc, ArrayList<Integer> queenFinLoc, ArrayList<Integer> arrowLoc, int colour) {
 		Board temp = new Board(this);
-		//need to check here if the start location has a queen at that spot?
-		if (move.validMove(temp, queenStartLoc, queenFinLoc) && this.getTile(queenStartLoc.get(0), queenStartLoc.get(1)) == colour) {//added to check if start position is valid
+		if (move.validMove(temp, queenStartLoc, queenFinLoc) && this.getTile(queenStartLoc.get(0), queenStartLoc.get(1)) == colour) {
 			temp.setTile(queenStartLoc.get(0), queenStartLoc.get(1), 0);
 			temp.setTile(queenFinLoc.get(0), queenFinLoc.get(1), colour);
 			if (move.validMove(temp, queenFinLoc, arrowLoc)) {
 				temp.setTile(arrowLoc.get(0), arrowLoc.get(1), POS_ARROW);
 				this.clone(temp);
 			}else {
-				//System.out.println("Invalid arrow move! Move not completed");//end game
+				System.out.println("Invalid arrow move! Move not completed");
 			}
 		}else 
-			//System.out.println("Invalid queen move! Move not completed");//end game
+			System.out.println("Invalid queen move! Move not completed");
 		counter++;
 	}
 	
+   /** Method to move specified colour randomly based on available positions and valid moves
+	* @param colour
+	*/
 	public ArrayList<Integer> randomMove(int colour) {
-		//creates a random move based on piece positions and valid moves
-		if(!this.checkWin(colour)) {
-			int piece = (int) Math.floor(Math.random()*4); //CONTINUE: need to pick a new piece if the piece has no valid moves
+		if(!this.checkWin(colour)) { //proceed if game is not yet won
+			int piece = (int) Math.floor(Math.random()*4);
 			ArrayList<ArrayList<Integer>> pos = this.getPositions(colour);
 			int sum = 0;
 			while(sum == 0) {
@@ -146,7 +180,6 @@ public class Board {
 			temp.setTile(pos.get(piece).get(0), pos.get(piece).get(1), 0);
 			temp.setTile(queen.get(0), queen.get(1), colour);
 			ArrayList<Integer> arrow = random(temp, colour, queen);
-			movePiece(pos.get(piece), queen, arrow, colour);
 			ArrayList<Integer> ret = new ArrayList<Integer>(6);
 			ret.add(pos.get(piece).get(0));
 			ret.add(pos.get(piece).get(1));
@@ -160,6 +193,11 @@ public class Board {
 		return null;
 	}
 	
+   /** Helper method for random move generator
+	* @param board
+	* @param colour
+	* @param pos
+	*/
 	public ArrayList<Integer> random(Board board, int colour, ArrayList<Integer> pos) {
 		ArrayList<Integer> valid = move.getMoves(board, pos);
 		int howFar = 0;
@@ -181,12 +219,16 @@ public class Board {
 		return queen;
 	}
 	
-	//return row, col positions of pieces of specified colour
+   /** Return row, column coordinates of all pieces of specified colour
+	* @param board
+	* @param colour
+	* @param pos
+	*/
 	public ArrayList<ArrayList<Integer>> getPositions(int colour) {
 		ArrayList<ArrayList<Integer>> pos = new ArrayList<ArrayList<Integer>>();
 		int count = 0;
 		for (int i = 12; i < N; i++) {
-			if (board.get(i) == colour) {
+			if (board.get(i) == colour && count <= 4) {//changed here
 				int row = i/11;
 				int column = i%11;
 				pos.add(new ArrayList<Integer>(Arrays.asList(i/11, i%11)));
@@ -196,7 +238,8 @@ public class Board {
 		return pos;
 	}
 	
-	//method to convert board to printable string
+   /** Converts current board to printable string
+	*/
 	public String toString() {
 		String ret = "\n= = = = = = = = = = = =\n";
 		for (int i = 11; i < N; i++) {

@@ -3,30 +3,40 @@ package ubc.cosc322;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** Code for Amazons node graph class - builds and extends a node graph of states
+ * 
+ * @author Team 05: Jose Pena, Corey Bond, Kshitij Suri, Jun Kang, Alex Rogov
+ * 6/7/2021
+ */
+
 public class RecursiveAI extends Board {
 
-    RecursiveAI parent = null;
-    Board board = null;
-    NodeGraph graph;
-
+	// Variables
+    public RecursiveAI parent = null;
+    public Board board = null;
+    public NodeGraph graph;
+    
+    /** Constructor with board definition
+ 	* @param board
+	*/
     RecursiveAI(Board board) {
         super(board);
         graph = new NodeGraph(board);
     }
+    
+    /** Constructor with board and parent definition
+ 	* @param parent
+ 	* @param board
+	*/
     RecursiveAI(RecursiveAI parent, Board board) {
         super(parent);
         this.parent = parent;
     }
 
-//    private int mode = 0;    //0 = make a border 1 = recursively go back and forth saving as much space as the pieces can
-    
-    //checks the mode, sends back queen's curr pos, queen's next location, arrow location, colour
-//    public void infoGrabber(ArrayList<Integer> queenCurr, int mode, int colour) {
-//    	ArrayList<Integer> queenNext = ai(queenCurr, mode, colour);
-//    	ArrayList<Integer> arrow = ai(queenCurr, mode, colour);
-//    	super.movePiece(queenCurr, queenNext, arrow, colour);
-//    }
-    
+    /** AI Method that calls relevant AI algorithm depending on how far along the game is
+ 	* @param parent
+ 	* @param board
+	*/    
     public ArrayList<Integer> ai(int colour) {
     	if (super.counter < 15) {
     		int depth = 1;
@@ -51,16 +61,43 @@ public class RecursiveAI extends Board {
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
-        	System.out.println(Arrays.deepToString(move.toArray()));
+//        	System.out.println(Arrays.deepToString(move.toArray()));
 //    		ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
 //			ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
 //			ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
 //			super.movePiece(oldQueen, newQueen, newArrow, colour);
+        	super.counter++;
     		return move;
+    	} else if (super.counter >= 15 && super.counter < 25) {
+    		int depth = 3;
+    		makeNodes(colour, depth, 'A');
+    		NodeGraph moveNode = miniMax(graph, new NodeGraph(Integer.MIN_VALUE), new NodeGraph(Integer.MAX_VALUE), true);
+    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
+																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
+																	));
+        	super.counter++;
+    		return move;    		
+    	} else if (super.counter >= 25) { // && super.counter < 45
+    		int depth = 5;
+    		makeNodes(colour, depth, 'A');
+    		NodeGraph moveNode = miniMax(graph, new NodeGraph(Integer.MIN_VALUE), new NodeGraph(Integer.MAX_VALUE), true);
+    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
+																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
+																	));
+        	super.counter++;
+    		return move; 
     	}
 		return null;
     }
-    public int counter = 0;
+
+    /** miniMax algorithm to prioritize maximizing the player's moves by minimizing the opponent's available moves
+ 	* @param node
+ 	* @param alpha
+ 	* @param beta
+ 	* @param maximizingPlayer
+	*/    
     public NodeGraph miniMax(NodeGraph node, NodeGraph alpha, NodeGraph beta, boolean maximizingPlayer) {
 //    	System.out.println("Counter: " + counter++);
     	if(node.children == null) {
@@ -98,12 +135,23 @@ public class RecursiveAI extends Board {
     	}
     }
     
+    /** Method to make nodes by expanding a graph
+ 	* @param colour
+ 	* @param depth
+ 	* @param strategy
+	*/    
     public void makeNodes(int colour, int depth, char strategy) {
     	for(int i = 0; i < depth; i++) {
     		expandGraph(colour, graph, strategy, i);
     	}
     }
     
+    /** Method to expand a graph by adding children based on attack mode
+ 	* @param colour
+ 	* @param node
+ 	* @param depth
+ 	* @param strategy
+	*/    
     public void expandGraph(int colour, NodeGraph node, char strategy, int depth) {
     	if(node.children == null) {
     		if(strategy == 'A') {
@@ -115,7 +163,13 @@ public class RecursiveAI extends Board {
     		expandGraph(colour, node.children.get(i), strategy, depth + 1);
     	}
     }
-    //moves a queen based on minimizing opponents possible moves - ONE LEVEL
+    
+    /** Method to move a queen based on minimizing opponents possible moves - ONE LEVEL
+ 	* @param colour
+ 	* @param node
+ 	* @param depth
+ 	* @param strategy
+	*/    
     public ArrayList<NodeGraph> nodeAttack(int colour, NodeGraph node, int depth) {
     	ArrayList<NodeGraph> branching = new ArrayList<NodeGraph>();
     	ArrayList<ArrayList<Integer>> queenCurr = node.getPositions(colour);
@@ -125,7 +179,7 @@ public class RecursiveAI extends Board {
     	int overallmin = Integer.MAX_VALUE;
     	
     	
-    	System.out.println(Arrays.deepToString(queenCurr.toArray()));
+//    	System.out.println(Arrays.deepToString(queenCurr.toArray()));
     	for (int f = 0; f < 4; f++ ) {	
     		ArrayList<Integer> queenmoves = node.move.getMoves(node, queenCurr.get(f));
     		//DEBUGG
@@ -143,7 +197,7 @@ public class RecursiveAI extends Board {
 	    			Board brd = new Board();
 	    			brd.clone(node);
 	    			//DEBUGG
-	    			System.out.println("Cloning the board: \n" + brd.toString());
+//	    			System.out.println("Cloning the board: \n" + brd.toString());
 	    			//track what the move is
 					ArrayList<ArrayList<Integer>> oppBefore = getOppPos(colour);
 	    			int sumBefore = 0;
@@ -191,25 +245,25 @@ public class RecursiveAI extends Board {
 	    						}
 	    					}
 	    					//DEBUGG
-	    					System.out.println("Total moves before = " + sumBefore);
-	    					System.out.println("Total moves  after= " + sumAfter);
-	    					System.out.println("Restricted move moves = " + (sumBefore - sumAfter));
-	    					System.out.println("New node to add is:" 
-	    											+ "\n-> Old Queen: " + Arrays.deepToString(queenCurr.get(f).toArray())
-	    											+ "\n-> New Queen: " + Arrays.deepToString(newQueen.toArray())
-	    											+ "\n-> New Arrow: " + Arrays.deepToString(newArrow.toArray())
-	    											+ "\n-> Value: " + (sumBefore - sumAfter)
-	    											+ "\n-> Board: " + brd2.toString()
-	    										);
+//	    					System.out.println("Total moves before = " + sumBefore);
+//	    					System.out.println("Total moves  after= " + sumAfter);
+//	    					System.out.println("Restricted move moves = " + (sumBefore - sumAfter));
+//	    					System.out.println("New node to add is:" 
+//	    											+ "\n-> Old Queen: " + Arrays.deepToString(queenCurr.get(f).toArray())
+//	    											+ "\n-> New Queen: " + Arrays.deepToString(newQueen.toArray())
+//	    											+ "\n-> New Arrow: " + Arrays.deepToString(newArrow.toArray())
+//	    											+ "\n-> Value: " + (sumBefore - sumAfter)
+//	    											+ "\n-> Board: " + brd2.toString()
+//	    										);
 	    					
 	    					NodeGraph temp = new NodeGraph(queenCurr.get(f), newQueen, newArrow, (sumBefore - sumAfter), brd2, depth);
 	    					branching.add(temp);
-	    					System.out.print("All values: \n[" );
+//	    					System.out.print("All values: \n[" );
 	    			    	for(int z = 0; z < branching.size(); z++) {
-	    			    		System.out.print(branching.get(z).getValue() + ", ");
+//	    			    		System.out.print(branching.get(z).getValue() + ", ");
 	    			    		//System.out.print(branching.get(z).toString());
 	    			    	}
-	    			    	System.out.println("] \n Size = " + branching.size() + "\n\n");
+//	    			    	System.out.println("] \n Size = " + branching.size() + "\n\n");
 	    				}
 	    			}
 	    		}
@@ -219,16 +273,13 @@ public class RecursiveAI extends Board {
     	return branching;
    }
     
-    // extend firstAI to further levels
-    public ArrayList<Integer> secondAI(int colour) {
-    	return null;
-    }
     
-    //find which move maximizes future moves
-    public ArrayList<Integer> lastAI(int colour) {
-    	return null;
-    }
-    
+   /** Method to provide coordinates of a new position based on provided original position, 
+    * and how far to move in a given direction.
+ 	* @param direction
+ 	* @param pos
+ 	* @param howFar
+	*/    
     public ArrayList<Integer> whereTo(int direction, ArrayList<Integer> pos, int howFar) {
     	ArrayList<Integer> newpos = new ArrayList<Integer>();
 		if (direction == Moves.N) {newpos.add(pos.get(0)-howFar); newpos.add(pos.get(1));}
@@ -242,6 +293,9 @@ public class RecursiveAI extends Board {
 		return newpos;
     }
     
+    /** Method to return the opponent's piece positions
+  	* @param colour
+ 	*/    
     public ArrayList<ArrayList<Integer>> getOppPos(int colour) {
     	int colour2 = 0;
     	if (colour==1) colour2 = 2;
@@ -250,7 +304,26 @@ public class RecursiveAI extends Board {
     	return opp;
     }
     
+//    //CLEAN LATER?
+//    
+//    private int mode = 0;    //0 = make a border 1 = recursively go back and forth saving as much space as the pieces can
+//    
+//    //checks the mode, sends back queen's curr pos, queen's next location, arrow location, colour
+//    public void infoGrabber(ArrayList<Integer> queenCurr, int mode, int colour) {
+//	  	ArrayList<Integer> queenNext = ai(queenCurr, mode, colour);
+//	  	ArrayList<Integer> arrow = ai(queenCurr, mode, colour);
+//	  	super.movePiece(queenCurr, queenNext, arrow, colour);
+//    }
+//
+//    // extend firstAI to further levels
+//    public ArrayList<Integer> secondAI(int colour) {
+//    	return null;
+//    }
+//    
+//    //find which move maximizes future moves
+//    public ArrayList<Integer> lastAI(int colour) {
+//    	return null;
+//    }
 
-    
 
 }

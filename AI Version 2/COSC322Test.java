@@ -14,9 +14,10 @@ import ygraph.ai.smartfox.games.GamePlayer;
 import ygraph.ai.smartfox.games.amazons.AmazonsGameMessage;
 
 /**
- * An example illustrating how to implement a GamePlayer
+ * GamePlayer Implementation - COSC322
  * @author Yong Gao (yong.gao@ubc.ca)
- * Jan 5, 2021
+ * @author Team 05: Corey Bond, Kshitij Suri, Jun Kang, Alex Rogov, Jose Pena
+ * June 9, 2021
  *
  */
 public class COSC322Test extends GamePlayer{
@@ -28,7 +29,8 @@ public class COSC322Test extends GamePlayer{
     private String userName = null;
     private String passwd = null;
     private Board myBoard = null;
-    private boolean moving = false;
+    
+    private boolean moving = true;
     private int myColour;
     private int oppColour;
 	
@@ -53,16 +55,13 @@ public class COSC322Test extends GamePlayer{
     }
 	
     /**
-     * Any name and passwd 
+     * Any name and password 
      * @param userName
       * @param passwd
      */
     public COSC322Test(String userName, String passwd) {
     	this.userName = userName;
     	this.passwd = passwd;
-    	
-    	//To make a GUI-based player, create an instance of BaseGameGUI
-    	//and implement the method getGameGUI() accordingly
     	this.gamegui = new BaseGameGUI(this);
     }
  
@@ -70,32 +69,25 @@ public class COSC322Test extends GamePlayer{
 
     @Override
     public void onLogin() {
-//    	System.out.println("Congratulations!!! "
-//    			+ "I am called because the server indicated that the login is successful");
-//    	System.out.println("The next step is to find a room and join it: "
-//    			+ "the gameClient instance created in my constructor knows how!"); 
-//
-//    	//get room list from game client, iterate through and print
-//    	List<Room> room = gameClient.getRoomList();
-//    	for (int i=0; i < room.size(); i++) {
-//    		System.out.println(i + ": " + room.get(i).getName());
-//    	}
-//    	//user defines preferred room to join
-//    	System.out.println("Which room number would you like to join?");
-//    	Scanner scan = new Scanner(System.in);
-//    	int want = scan.nextInt();
-//    	while (want < 0 || want > 18) {
-//    		System.out.println("Invalid input. Try again.");
-//    		want = scan.nextInt();
-//        }
-//    	//join relevant room
-//    	gameClient.joinRoom(room.get(want).getName());
-//    	scan.close();
+    	System.out.println("Congratulations!!! "
+    			+ "I am called because the server indicated that the login is successful");
+    	System.out.println("The next step is to find a room and join it: "
+    			+ "the gameClient instance created in my constructor knows how!"); 
     	userName = gameClient.getUserName();
     	if(gamegui != null) {
     		gamegui.setRoomInformation(gameClient.getRoomList());
     	}
     }
+    
+    /**
+     * Takes in coordinates of players moves, and communicates it to the gui 
+     * @param qr1 : Original queen row number
+     * @param qc1 : Original queen column number
+     * @param qr2 : New queen row number
+     * @param qc2 : New queen column number
+     * @param ar : Arrow row number
+     * @param ac : Arrow column number
+     */
     public void sendPlay(int qr1, int qc1, int qr2, int qc2, int ar, int ac) {
     	ArrayList<Integer> queenStart = new ArrayList<Integer>();
     	queenStart.add(qr1);
@@ -106,28 +98,38 @@ public class COSC322Test extends GamePlayer{
     	ArrayList<Integer> arrow = new ArrayList<Integer>();
     	arrow.add(ar);
     	arrow.add(ac);
+    	
     	this.gameClient.sendMoveMessage(queenStart, queenEnd, arrow);
     	this.gamegui.updateGameState(queenStart, queenEnd, arrow);
     }
 
+   /**
+    * This method will be called by the GameClient when it receives a game-related message
+	* from the server.
+	*
+	* For a detailed description of the message types and format, 
+	* see the method GamePlayer.handleGameMessage() in the game-client-api document. 
+	*
+	* @param messageType
+	* @param msgDetails
+    */
     @Override
     public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails) {
-    	//prints parameters of each message, depending on message type
     	if(messageType.compareTo(GameMessage.GAME_STATE_BOARD)==0) {
     		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+    		if(board==null) System.out.println("Board state is null");
     		myBoard = new Board();
-			this.player = new RecursiveAI(myBoard);
     		System.out.println(myBoard.toString());
-			this.gamegui.setGameState(myBoard.getBoard());
+			this.gamegui.setGameState(board);
     	}
     	else if(messageType.compareTo(GameMessage.GAME_ACTION_START)==0) {
-    		ArrayList<Integer> board = myBoard.getBoard();//(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+    		ArrayList<Integer> board = myBoard.getBoard();
     		this.gamegui.setGameState(board);
     		System.out.println("Action start message");
     		if(board == null)
     			System.out.println("No board information");
     		else {
-    			printGameState(board);
+    			System.out.println(myBoard.toString());
     			this.gamegui.setGameState(board);
     		}
     		
@@ -147,7 +149,6 @@ public class COSC322Test extends GamePlayer{
 				myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
     			sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
     			System.out.println(myBoard.toString());
-    			this.moving = true;
     		}else {
     			this.myColour = myBoard.POS_WHITE;
     			this.oppColour = myBoard.POS_BLACK;
@@ -155,7 +156,7 @@ public class COSC322Test extends GamePlayer{
         }
     	else if(messageType.compareTo(GameMessage.GAME_ACTION_MOVE)==0) {
     		if (!myBoard.checkWin(myColour) && !myBoard.checkWin(oppColour)) {
-	    		if(this.moving) {
+    			if(this.moving) {
 	    			ArrayList<Integer> queenCurr = 
 	    					(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);    		
 		    		ArrayList<Integer> queenNext = 
@@ -163,9 +164,9 @@ public class COSC322Test extends GamePlayer{
 		    		ArrayList<Integer> arrow = 
 		    				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
 		    		System.out.println("Action move message");
-		    		System.out.println("The current Queen position is: " + queenCurr);
-		    		System.out.println("The next Queen position is: " + queenNext);
-		    		System.out.println("The blocking arrow position is: " + arrow);
+		    		System.out.println("The opponent's starting Queen position was: " + queenCurr);
+		    		System.out.println("The opponent's new Queen position is: " + queenNext);
+		    		System.out.println("The opponent's blocking arrow position is: " + arrow);
 		    		myBoard.movePiece(queenCurr, queenNext, arrow, oppColour);
 		    		this.moving = false;
 		    		this.gamegui.updateGameState(msgDetails);
@@ -176,33 +177,19 @@ public class COSC322Test extends GamePlayer{
 	    			ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
 					ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
 					ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(play.get(4), play.get(5)));
-					myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
+					System.out.println("Action move message");
+		    		System.out.println("Our starting Queen position was: [" + play.get(0) + ", " + play.get(1) + "]");
+		    		System.out.println("Our new Queen position is: [" + play.get(2) + ", " + play.get(3) + "]");
+		    		System.out.println("Our blocking arrow position is: [" + play.get(4) + ", " + play.get(5) + "]");
+		    		myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
 	    			sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
 	    			System.out.println(myBoard.toString());
 	    			this.moving = true;
 	    		}
-    	}
-    	//This method will be called by the GameClient when it receives a game-related message
-    	//from the server.
-	
-    	//For a detailed description of the message types and format, 
-    	//see the method GamePlayer.handleGameMessage() in the game-client-api document. 
-    	    	
+    	}    	    	
     	return true;   	
     }
-    
-    //prints current game state in 10 x 10 board format
-    public void printGameState(ArrayList<Integer> gameState) {
-		System.out.println("The current game state is: \n- - - - - - - - - - - -");
-		for (int i = 11; i < gameState.size(); i++) {
-			if (i == 12)						System.out.print("| " + gameState.get(i) +  " ");
-			else if (i == gameState.size()-1)   System.out.println(gameState.get(i) +  " |\n- - - - - - - - - - - -");
-			else if ((i+1) % 11 == 0)			System.out.print(gameState.get(i) +  " |\n| ");
-			else if (i%11 == 0)					System.out.print("");
-			else								System.out.print(gameState.get(i) +  " ");
-		}    	
-    }
-    
+        
     @Override
     public String userName() {
     	return userName;
@@ -210,20 +197,17 @@ public class COSC322Test extends GamePlayer{
 
 	@Override
 	public GameClient getGameClient() {
-		// TODO Auto-generated method stub
 		return this.gameClient;
 	}
 
 	@Override
 	public BaseGameGUI getGameGUI() {
-		// TODO Auto-generated method stub
 		return  this.gamegui;
 	}
 
 	@Override
 	public void connect() {
-		// TODO Auto-generated method stub
-    	gameClient = new GameClient(userName, passwd, this);			
+		gameClient = new GameClient(userName, passwd, this);			
 	}
 
  
