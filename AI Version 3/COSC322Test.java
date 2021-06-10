@@ -139,7 +139,7 @@ public class COSC322Test extends GamePlayer{
     		String white = (String) msgDetails.get(AmazonsGameMessage.PLAYER_WHITE);
     		System.out.println("The Black Player's name is " + black + ", and the White player's name is " + white + ".");
     		
-    		if(black.contains(userName)) {
+    		if(black.equals(userName)) {
     			this.myColour = myBoard.POS_BLACK;
     			this.oppColour = myBoard.POS_WHITE;
 //    			ArrayList<Integer> play = myBoard.randomMove(myColour);
