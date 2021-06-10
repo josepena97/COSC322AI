@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class NodeGraph extends Board{
 	
 	// Variables
-    public ArrayList<Integer> oldQueen = new ArrayList<Integer>();
-    public ArrayList<Integer> newQueen = new ArrayList<Integer>();
-    public ArrayList<Integer> newArrow= new ArrayList<Integer>();
+    public ArrayList<Integer> oldQueen = new ArrayList<Integer>(); //null;
+    public ArrayList<Integer> newQueen = new ArrayList<Integer>(); //null;
+    public ArrayList<Integer> newArrow= new ArrayList<Integer>(); //null;
     public ArrayList<NodeGraph> children = null;
     public double value;
     public double scale;

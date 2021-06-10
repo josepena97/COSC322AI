@@ -37,8 +37,8 @@ public class RecursiveAI extends Board {
  	* @param parent
  	* @param board
 	*/    
-    public ArrayList<Integer> ai(int colour) {
-    	if (super.counter < 2) {
+    public ArrayList<Integer> ai(int colour, int counter) {
+    	if (counter < 10) {
     		int depth = 1;
     		double scale = 1;
     		makeNodes(colour, depth, 'A', scale);
@@ -50,71 +50,89 @@ public class RecursiveAI extends Board {
 //	    	}
 //    		//System.out.println("MIN-MAX ALPHA-BETA:");
     		NodeGraph moveNode = miniMax(graph, new NodeGraph(Double.MIN_VALUE), new NodeGraph(Double.MAX_VALUE), true);
-    		System.out.println("DONE MIN-MAX ALPHA-BETA:");
-    		System.out.println("MAX node to add is:" 
-									+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
-									+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
-									+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
-									+ "\n-> Value: " + moveNode.value
-									+ "\n-> Board: " + moveNode.toString()
-    								);
-    		if (moveNode.oldQueen.isEmpty())
-    			return null;
-    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+//    		System.out.println("DONE MIN-MAX ALPHA-BETA:");
+//    		System.out.println("MAX node to add is:" 
+//									+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
+//									+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
+//									+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
+//									+ "\n-> Value: " + moveNode.value
+//									+ "\n-> Board: " + moveNode.toString()
+//    								);
+    		ArrayList<Integer> move = null;
+    		if (!moveNode.oldQueen.isEmpty()) {
+    			move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
-//        	//System.out.println(Arrays.deepToString(move.toArray()));
-//    		ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
-//			ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
-//			ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
-//			super.movePiece(oldQueen, newQueen, newArrow, colour);
-        	super.counter++;
-    		return move;
-    	} else if (super.counter >= 2 && super.counter < 5) {
-    		int depth = 10;
-    		double scale = 1;
-    		makeNodes(colour, depth, 'A', scale);
-    		NodeGraph moveNode = miniMax(graph, new NodeGraph(Double.MIN_VALUE), new NodeGraph(Double.MAX_VALUE), true);
-    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
-																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
-																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
-																	));
-        	super.counter++;
-    		return move;    		
-    	} else if (super.counter >= 5 && super.counter < 15) {
-    		int depth = 10;
+    		} else if (moveNode.oldQueen.isEmpty()) {
+    			move = graph.randomMove(colour);
+    			System.out.println("Used random player");
+    		}
+        	return move; 
+//    	} else if (counter >= 2 && counter < 5) {
+//    		int depth = 2;
+//    		double scale = 1;
+//    		makeNodes(colour, depth, 'A', scale);
+//    		NodeGraph moveNode = miniMax(graph, new NodeGraph(Double.MIN_VALUE), new NodeGraph(Double.MAX_VALUE), true);
+//    		ArrayList<Integer> move = null;
+//    		if (!moveNode.oldQueen.isEmpty()) {
+//    			move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+//																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
+//																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
+//																	));
+//    		} else if (moveNode.oldQueen.isEmpty()) {
+//    			move = graph.randomMove(colour);
+//    		}
+//        	return move; 		
+    	} else if (counter >= 10 && counter < 15) {
+    		int depth = 1;
     		double scale = 0.8;
     		makeNodes(colour, depth, 'A', scale);
     		NodeGraph moveNode = miniMax(graph, new NodeGraph(Double.MIN_VALUE), new NodeGraph(Double.MAX_VALUE), true);
-    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+    		ArrayList<Integer> move = null;
+    		if (!moveNode.oldQueen.isEmpty()) {
+    			move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
-        	super.counter++;
-    		return move; 
-    	} else if (super.counter >= 15 && super.counter < 25) {
-    		int depth = 20;
+    		} else if (moveNode.oldQueen.isEmpty()) {
+    			move = graph.randomMove(colour);
+    			System.out.println("Used random player");
+    		}
+        	return move;  
+    	} else if (counter >= 15 && counter < 25) {
+    		int depth = 1;
     		double scale = 0.5;
     		makeNodes(colour, depth, 'A', scale);
     		NodeGraph moveNode = miniMax(graph, new NodeGraph(Double.MIN_VALUE), new NodeGraph(Double.MAX_VALUE), true);
-    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+    		
+    		ArrayList<Integer> move = null;
+    		if (!moveNode.oldQueen.isEmpty()) {
+    			move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
-        	super.counter++;
-    		return move; 
-    	}else if (super.counter >= 25) { // && super.counter < 45
-    		int depth = 15;
+    		} else if (moveNode.oldQueen.isEmpty()) {
+    			move = graph.randomMove(colour);
+    			System.out.println("Used random player");
+    		}
+        	return move; 
+    	}else if (counter >= 25) { // && super.counter < 45
+    		int depth = 1;
     		double scale = 0.2;
     		makeNodes(colour, depth, 'A', scale);
     		NodeGraph moveNode = miniMax(graph, new NodeGraph(Double.MIN_VALUE), new NodeGraph(Double.MAX_VALUE), true);
-    		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
+    		ArrayList<Integer> move = null;
+    		if (!moveNode.oldQueen.isEmpty()) {
+    			move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
-        	super.counter++;
-    		return move; 
+    		} else if (moveNode.oldQueen.isEmpty()) {
+    			move = graph.randomMove(colour);
+    			System.out.println("Used random player");
+    		}
+        	return move; 
     	}
 		return null;
     }
@@ -130,15 +148,21 @@ public class RecursiveAI extends Board {
     		//System.out.println("ENDED");
     		return node;
     	}
-    	System.out.println("\n\n MINMAX \nCounter: " + counter++);
-	    System.out.println("MAX node to add is:" 
-					+ "\n-> Old Queen: " + Arrays.deepToString(node.oldQueen.toArray())
-					+ "\n-> New Queen: " + Arrays.deepToString(node.newQueen.toArray())
-					+ "\n-> New Arrow: " + Arrays.deepToString(node.newArrow.toArray())
-					+ "\n-> Value: " + node.value
-					+ "\nChildren size = " + node.children.size()
-					+ "\n-> Board: " + node.toString()
-				);
+    	if (maximizingPlayer && node.oldQueen == null) {
+    		return new NodeGraph(Double.MIN_VALUE);
+    	}
+    	if (!maximizingPlayer && node.oldQueen == null) {
+    		return new NodeGraph(Double.MAX_VALUE);
+    	}
+//    	System.out.println("\n\n MINMAX \nCounter: " + counter);
+//	    System.out.println("MAX node to add is:" 
+//					+ "\n-> Old Queen: " + Arrays.deepToString(node.oldQueen.toArray())
+//					+ "\n-> New Queen: " + Arrays.deepToString(node.newQueen.toArray())
+//					+ "\n-> New Arrow: " + Arrays.deepToString(node.newArrow.toArray())
+//					+ "\n-> Value: " + node.value
+//					+ "\nChildren size = " + node.children.size()
+//					+ "\n-> Board: " + node.toString()
+//				);
     	
     	if(maximizingPlayer) {
     		NodeGraph best = new NodeGraph(Double.MIN_VALUE);
@@ -184,7 +208,8 @@ public class RecursiveAI extends Board {
     			//System.out.println("OPPONENTS EXPAND NODE");
     			expandGraph(getOppColour(colour), graph, strategy, i, scale);
     		}
-    		expandGraph(colour, graph, strategy, i, scale);
+    		if (i % 2 == 0)
+    			expandGraph(colour, graph, strategy, i, scale);
     	}
     }
     
@@ -205,7 +230,7 @@ public class RecursiveAI extends Board {
     		return; 
     	}
     	for(int i = 0; i < node.children.size(); i++) {
-//        	//System.out.println("Iterating through child " + i);
+//        	System.out.println("Iterating through child " + i);
     		expandGraph(colour, node.children.get(i), strategy, depth + 1, scale);
     	}
     }
@@ -225,7 +250,7 @@ public class RecursiveAI extends Board {
     	int overallmin = Integer.MAX_VALUE;
     	
     	
-    	//System.out.println(Arrays.deepToString(queenCurr.toArray()));
+//    	System.out.println(Arrays.deepToString(queenCurr.toArray()));
     	for (int f = 0; f < 4; f++ ) {	
     		ArrayList<Integer> queenmoves = node.move.getMoves(node, queenCurr.get(f));
     		//DEBUGG

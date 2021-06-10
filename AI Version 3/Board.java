@@ -20,7 +20,7 @@ public class Board {
 	public static final int N = 121;
 	public static final ArrayList<Integer> W_POS = new ArrayList<>(Arrays.asList(15, 18, 45, 54));
 	public static final ArrayList<Integer> B_POS = new ArrayList<>(Arrays.asList(78, 87, 114, 117));
-	public int counter;
+//	public static int counter;
 	
 	protected ArrayList<Integer> board;
 	protected Moves move;
@@ -34,7 +34,7 @@ public class Board {
 			board.set(B_POS.get(i), POS_BLACK);
 			board.set(W_POS.get(i), POS_WHITE);
 		}
-		counter = 0;
+//		this.counter = 0;
 		move = new Moves();
 	}
 	
@@ -53,7 +53,7 @@ public class Board {
 	*/
 	public void clone(Board source) {
 		Collections.copy(this.board, source.board);
-		counter = source.counter;
+//		counter = source.counter;
 	}
 		
    /** Get tile method to convert row, col to 1D array index
@@ -156,7 +156,7 @@ public class Board {
 			}
 		}else 
 			System.out.println("Invalid queen move! Move not completed");
-		counter++;
+//		this.counter++;
 	}
 	
    /** Method to move specified colour randomly based on available positions and valid moves

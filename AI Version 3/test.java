@@ -7,7 +7,8 @@ public class test {
 	public static void main(String[] args) {
 		Board practice = new Board();
 		System.out.println(practice.toString());
-
+//		System.out.println(practice.counter);
+		int count = 0;
 		//practice.setTile(4,5,2);
 		//practice.setTileFromCharIndex(57, 1);
 //		Board ver2 = new Board(practice);
@@ -35,12 +36,14 @@ public class test {
 			if(!practice.checkWin(1)) {
 				System.out.println("Iteration number " + (i+1));
 				player.clone(practice);
-				ArrayList<Integer> move = player.ai(1);
+				ArrayList<Integer> move = player.ai(1, count);
 				System.out.println("test.java");
 				ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(move.get(0), move.get(1)));
 				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
 				ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
 				practice.movePiece(oldQueen, newQueen, newArrow, 1);
+				count++;
+//				System.out.println(practice.counter);
 				System.out.println(practice.toString());
 			}else {
 				break;
@@ -51,6 +54,7 @@ public class test {
 				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(move.get(2), move.get(3)));
 				ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(move.get(4), move.get(5)));
 				practice.movePiece(oldQueen, newQueen, newArrow, 2);
+//				System.out.println(practice.counter);
 				System.out.println(practice.toString());
 			}else {
 				break;

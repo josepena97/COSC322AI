@@ -33,6 +33,7 @@ public class COSC322Test extends GamePlayer{
     private boolean moving = true;
     private int myColour;
     private int oppColour;
+    private int count;
 	
     /**
      * The main method
@@ -119,6 +120,7 @@ public class COSC322Test extends GamePlayer{
     		ArrayList<Integer> board = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
     		if(board==null) System.out.println("Board state is null");
     		myBoard = new Board();
+    		count = 0;
     		System.out.println(myBoard.toString());
 			this.gamegui.setGameState(board);
     	}
@@ -142,11 +144,12 @@ public class COSC322Test extends GamePlayer{
     			this.oppColour = myBoard.POS_WHITE;
 //    			ArrayList<Integer> play = myBoard.randomMove(myColour);
     			this.player = new RecursiveAI(myBoard);
-    			ArrayList<Integer> play = player.ai(myColour);
+    			ArrayList<Integer> play = player.ai(myColour, count);
     			ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
 				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
 				ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(play.get(4), play.get(5)));
 				myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
+				count++;
     			sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
     			System.out.println(myBoard.toString());
     		}else {
@@ -175,7 +178,7 @@ public class COSC322Test extends GamePlayer{
     		if (!myBoard.checkWin(oppColour)) {
 	    		this.player = new RecursiveAI(myBoard);
 	//	    	ArrayList<Integer> play = myBoard.randomMove(myColour);
-		    	ArrayList<Integer> play = player.ai(myColour);
+		    	ArrayList<Integer> play = player.ai(myColour, count);
 		    	ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
 				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
 				ArrayList<Integer> newArrow = new ArrayList<Integer>(Arrays.asList(play.get(4), play.get(5)));
@@ -184,6 +187,7 @@ public class COSC322Test extends GamePlayer{
 			   	System.out.println("Our new Queen position is: [" + play.get(2) + ", " + play.get(3) + "]");
 			   	System.out.println("Our blocking arrow position is: [" + play.get(4) + ", " + play.get(5) + "]");
 			   	myBoard.movePiece(oldQueen, newQueen, newArrow, myColour);
+			   	count++;
 		    	sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
 		    	System.out.println(myBoard.toString());
 		    	this.moving = true;
