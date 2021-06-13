@@ -20,6 +20,9 @@ public class Board {
 	public static final int N = 121;
 	public static final ArrayList<Integer> W_POS = new ArrayList<>(Arrays.asList(15, 18, 45, 54));
 	public static final ArrayList<Integer> B_POS = new ArrayList<>(Arrays.asList(78, 87, 114, 117));
+	private boolean win = false;
+	private String winner;
+    
 //	public static int counter;
 	
 	protected ArrayList<Integer> board;
@@ -118,23 +121,35 @@ public class Board {
    /** Method to determine if the game has a winner - based on provided player having remaining moves
 	* @param colour
 	*/
-	public boolean checkWin(int colour) {
-		ArrayList<ArrayList<Integer>> pieces = this.getPositions(colour);
-		
-		for(int i = 0; i < 4; i++) {
-			ArrayList<Integer> moves = move.getMoves(this, pieces.get(i));
-			for (int j = 0; j < 8; j++) {
-				if (moves.get(j) > 0)
-					return false;
+	public boolean checkWin() {
+		if (!win) {
+			ArrayList<ArrayList<Integer>> bpieces = this.getPositions(POS_BLACK);
+			ArrayList<ArrayList<Integer>> wpieces = this.getPositions(POS_WHITE);
+			
+			for(int i = 0; i < 4; i++) {
+				ArrayList<Integer> moves = move.getMoves(this, bpieces.get(i));
+				for (int j = 0; j < 8; j++) {
+					if (moves.get(j) > 0)
+						return false;
+				}
 			}
-		}
-		
-		//if the array of possible moves for the player is empty - then the other team wins
-		if (colour == POS_WHITE)
-			System.out.println("Winner is: Black");
-		else
-			System.out.println("Winner is: White");
-		return true;
+			win = true;
+			winner = "White";
+			System.out.println("\nWinner is: White----\n");
+			
+			for(int i = 0; i < 4; i++) {
+				ArrayList<Integer> moves = move.getMoves(this, wpieces.get(i));
+				for (int j = 0; j < 8; j++) {
+					if (moves.get(j) > 0)
+						return false;
+				}
+			}
+			win = true;
+			winner = "Black";
+			System.out.println("\nWinner is: Black----\n");
+		}	
+		System.out.println("\nWinner is: "+ winner + "----\n");
+		return win;
 	}
 	
    /** Method to move piece based on provided start and finish coordinates
@@ -152,10 +167,10 @@ public class Board {
 				temp.setTile(arrowLoc.get(0), arrowLoc.get(1), POS_ARROW);
 				this.clone(temp);
 			}else {
-				System.out.println("Invalid arrow move! Move not completed");
+				System.out.println("\n----Invalid arrow move! Move not completed----\n");
 			}
 		}else 
-			System.out.println("Invalid queen move! Move not completed");
+			System.out.println("\n----Invalid queen move! Move not completed----\n");
 //		this.counter++;
 	}
 	
@@ -163,7 +178,7 @@ public class Board {
 	* @param colour
 	*/
 	public ArrayList<Integer> randomMove(int colour) {
-		if(!this.checkWin(colour)) { //proceed if game is not yet won
+		if(!this.checkWin()) { //proceed if game is not yet won
 			int piece = (int) Math.floor(Math.random()*4);
 			ArrayList<ArrayList<Integer>> pos = this.getPositions(colour);
 			int sum = 0;

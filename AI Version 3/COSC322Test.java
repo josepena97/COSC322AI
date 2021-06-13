@@ -158,7 +158,7 @@ public class COSC322Test extends GamePlayer{
     		}
         }
     	else if(messageType.compareTo(GameMessage.GAME_ACTION_MOVE)==0) {
-    		if (!myBoard.checkWin(myColour)) {
+    		if (!myBoard.checkWin()) {
     			if(this.moving) {
 	    			ArrayList<Integer> queenCurr = 
 	    					(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);    		
@@ -166,7 +166,7 @@ public class COSC322Test extends GamePlayer{
 		    				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.Queen_POS_NEXT);
 		    		ArrayList<Integer> arrow = 
 		    				(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
-		    		System.out.println("Action move message");
+		    		System.out.println("\nAction move message");
 		    		System.out.println("The opponent's starting Queen position was: " + queenCurr);
 		    		System.out.println("The opponent's new Queen position is: " + queenNext);
 		    		System.out.println("The opponent's blocking arrow position is: " + arrow);
@@ -175,7 +175,7 @@ public class COSC322Test extends GamePlayer{
 		    		this.gamegui.updateGameState(msgDetails);
 	    		}
     		}
-    		if (!myBoard.checkWin(oppColour)) {
+    		if (!myBoard.checkWin()) {
 	    		this.player = new RecursiveAI(myBoard);
 	//	    	ArrayList<Integer> play = myBoard.randomMove(myColour);
 		    	ArrayList<Integer> play = player.ai(myColour, count);
@@ -191,6 +191,7 @@ public class COSC322Test extends GamePlayer{
 		    	sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
 		    	System.out.println(myBoard.toString());
 		    	this.moving = true;
+		    	myBoard.checkWin();
     		}
     	}    	    	
     	return true;   	
