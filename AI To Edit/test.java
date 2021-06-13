@@ -31,7 +31,7 @@ public class test {
 //			System.out.println("(" + pos[i][0] + ", " + pos[i][1] + ")");
 		
 		for(int i = 0; i < 50; i++){
-			if(!practice.checkWin(2)) {
+			if(!practice.checkWin()) {
 				RecursiveAI player = new RecursiveAI(practice, 1);
 				player.clone(practice);
 				ArrayList<Integer> move = player.ai(1, i);
@@ -44,7 +44,7 @@ public class test {
 			} else {
 				break;
 			}
-			if(!practice.checkWin(1)) {
+			if(!practice.checkWin()) {
 				RecursiveAIOld player = new RecursiveAIOld(practice);
 				player.clone(practice);
 				ArrayList<Integer> move = player.ai(2, i);
