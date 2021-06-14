@@ -338,7 +338,7 @@ public class RecursiveAIOld extends Board {
 	    						}
 	    					}
 	    					
-	    					//DEBUGG
+//	    					DEBUGG
 //	    					double wVal = ((sumBefore - sumAfter) * scale) + ((sumOurs * (1 - scale)));
 //	    					if(newQueen.isEmpty()) {
 //	    						System.out.println("ADDING EMPTY QUEEN");

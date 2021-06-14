@@ -21,6 +21,8 @@ public class NodeGraph extends Board{
     public int myMoves;
     public double enemyMovesp;
     public double myMovesp;
+    public int enemyArea;
+    public int myArea;
     public int depth;
     public String name;
     
@@ -70,7 +72,8 @@ public class NodeGraph extends Board{
  	* @param d : depth
  	*/
     public NodeGraph(ArrayList<Integer> oldq, ArrayList<Integer> q, 
-    					ArrayList<Integer> a, int val1, int val2, double val1p, double val2p, Board b, int d, double sc) {
+    					ArrayList<Integer> a, int val1, int val2, double val1p, double val2p, 
+    					Board b, int d, double sc, int area1, int area2) {
         super();
         this.scale = sc;
         this.oldQueen = oldq;
@@ -83,6 +86,9 @@ public class NodeGraph extends Board{
     	this.value = (val1p * sc) + (val2p * (1-sc));
     	super.board = b.board;
     	this.depth = d; 
+    	this.enemyArea = area1;
+    	this.myArea = area2;
+    	
     }
 
     /** Method to add a child to the graph

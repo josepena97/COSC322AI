@@ -2,6 +2,7 @@ package ubc.cosc322;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /** Code for Amazons node graph class - builds and extends a node graph of states
  * 
@@ -61,7 +62,8 @@ public class RecursiveAI extends Board {
 									+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
 									+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
 									+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
-									+ "\n-> Value: " + moveNode.value
+									+ "\n-> myArea: " + moveNode.myArea
+									+ "\n-> myEnemy: " + moveNode.enemyArea
 									+ "\n Name: " + moveNode.name
 									+ "\n-> Board: " + moveNode.toString()
     								);
@@ -84,53 +86,56 @@ public class RecursiveAI extends Board {
 					new NodeGraph(-Integer.MAX_VALUE, Integer.MAX_VALUE,  Double.MAX_VALUE, "Beta"), true);
     		System.out.println("DONE MIN-MAX ALPHA-BETA:");
     		System.out.println("MAX node to add is:" 
-									+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
-									+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
-									+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
-									+ "\n-> Value: " + moveNode.value
-									+ "\n Name: " + moveNode.name
-									+ "\n-> Board: " + moveNode.toString()
-    								);
+					+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
+					+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
+					+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
+					+ "\n-> myArea: " + moveNode.myArea
+					+ "\n-> myEnemy: " + moveNode.enemyArea
+					+ "\n Name: " + moveNode.name
+					+ "\n-> Board: " + moveNode.toString()
+					);
     		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
     		return move;    		
     	} else if (counter >= 15 && counter < 20) {
-    		int depth = 2;
+    		int depth = 3;
     		double scale = 0.5;
     		makeNodes(colour, depth, 'A', scale);
     		NodeGraph moveNode = miniMax(graph, new NodeGraph(Integer.MAX_VALUE, -Integer.MAX_VALUE, -Double.MAX_VALUE, "Alpha"), 
 					new NodeGraph(-Integer.MAX_VALUE, Integer.MAX_VALUE,  Double.MAX_VALUE, "Beta"), true);
      		System.out.println("DONE MIN-MAX ALPHA-BETA:");
-    		System.out.println("MAX node to add is:" 
-									+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
-									+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
-									+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
-									+ "\n-> Value: " + moveNode.value
-									+ "\n Name: " + moveNode.name
-									+ "\n-> Board: " + moveNode.toString()
-    								);
+     		System.out.println("MAX node to add is:" 
+					+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
+					+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
+					+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
+					+ "\n-> myArea: " + moveNode.myArea
+					+ "\n-> myEnemy: " + moveNode.enemyArea
+					+ "\n Name: " + moveNode.name
+					+ "\n-> Board: " + moveNode.toString()
+					);
     		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
 																	));
     		return move; 
     	} else if (counter >= 20 && counter < 28) {
-    		int depth = 3;
+    		int depth = 4;
     		double scale = 0.5;
     		makeNodes(colour, depth, 'A', scale);
     		NodeGraph moveNode = miniMax(graph, new NodeGraph(Integer.MAX_VALUE, -Integer.MAX_VALUE, -Double.MAX_VALUE, "Alpha"), 
 					new NodeGraph(-Integer.MAX_VALUE, Integer.MAX_VALUE,  Double.MAX_VALUE, "Beta"), true);
     		System.out.println("DONE MIN-MAX ALPHA-BETA:");
     		System.out.println("MAX node to add is:" 
-									+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
-									+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
-									+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
-									+ "\n-> Value: " + moveNode.value
-									+ "\n Name: " + moveNode.name
-									+ "\n-> Board: " + moveNode.toString()
-    								);
+					+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
+					+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
+					+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
+					+ "\n-> myArea: " + moveNode.myArea
+					+ "\n-> myEnemy: " + moveNode.enemyArea
+					+ "\n Name: " + moveNode.name
+					+ "\n-> Board: " + moveNode.toString()
+					);
     		ArrayList<Integer> move = new ArrayList<Integer>(Arrays.asList(moveNode.oldQueen.get(0), moveNode.oldQueen.get(1),
 																	moveNode.newQueen.get(0), moveNode.newQueen.get(1),
 																	moveNode.newArrow.get(0), moveNode.newArrow.get(1)
@@ -146,9 +151,8 @@ public class RecursiveAI extends Board {
 					+ "\n-> Old Queen: " + Arrays.deepToString(moveNode.oldQueen.toArray())
 					+ "\n-> New Queen: " + Arrays.deepToString(moveNode.newQueen.toArray())
 					+ "\n-> New Arrow: " + Arrays.deepToString(moveNode.newArrow.toArray())
-					+ "\n-> Value: " + moveNode.value
-					+ "\n-> enemyMoves: " + moveNode.enemyMoves
-					+ "\n-> myMoves: " + moveNode.myMoves
+					+ "\n-> myArea: " + moveNode.myArea
+					+ "\n-> myEnemy: " + moveNode.enemyArea
 					+ "\n Name: " + moveNode.name
 					+ "\n-> Board: " + moveNode.toString()
 					);
@@ -186,6 +190,9 @@ public class RecursiveAI extends Board {
     	if(maximizingPlayer) {
     		NodeGraph best = new NodeGraph(Integer.MAX_VALUE, -Integer.MAX_VALUE, -Double.MAX_VALUE, "BestMax " + minmaxcounter++);
     		for(int i = 0; i < node.children.size(); i++) {
+    			if(i == 0) {
+    				best = node.children.get(i);
+    			}
 //	    		System.out.println("MAX iteration: " + i);
 	    		NodeGraph val = miniMax(node.children.get(i), alpha, beta, false);
 	    		val.oldQueen = node.children.get(i).oldQueen;
@@ -213,6 +220,9 @@ public class RecursiveAI extends Board {
     	} else {
     		NodeGraph best = new NodeGraph(-Integer.MAX_VALUE, Integer.MAX_VALUE, Double.MAX_VALUE, "BestAlpha " + minmaxcounter++);
     		for(int i = 0; i < node.children.size(); i++) {
+    			if(i == 0) {
+    				best = node.children.get(i);
+    			}
 //	    		System.out.println("MIN iteration: " + i);
 	    		NodeGraph val = miniMax(node.children.get(i), alpha, beta, true);
 	    		//System.out.println("Node val = " +val.value);
@@ -233,26 +243,43 @@ public class RecursiveAI extends Board {
     }
     
     public NodeGraph conditionalMax(NodeGraph g1, NodeGraph g2) {
-    	if(g1.value > g2.value) {
-	    	if(g1.newQueen == null || g1.newQueen.isEmpty())
-	    		return g2;
-	    	Moves checker = new Moves();
-	    	ArrayList<Integer> q = checker.getMoves(g1, g1.newQueen);
-	    	if(q.size() == 0)
-	    		return g2;
-    	
+    	if(g1.myArea > g2.myArea) {
     		return g1;
+    	}else if(g1.myArea == g2.myArea) {
+    		if(g1.enemyArea < g2.enemyArea) {
+    			return g1;
+    		} else if(g1.enemyArea == g2.enemyArea) {
+    			if(g1.scale > 0.5) {
+    				if(g1.enemyMoves < g2.enemyMoves) return g1;
+    			}else {
+    				if(g1.myMoves > g2.myMoves) return g1; 
+    			}
+    		}
+    		return g2;
+    	}else if(g1.myArea < g2.myArea) {
+    		if(g1.myArea > g1.enemyArea) return g1; 
     	}
     	return g2;
     }
     
    
     public NodeGraph conditionalMin(NodeGraph g1, NodeGraph g2) {
-
-    	if(g1.value < g2.value) {
+    	if(g1.enemyArea > g2.enemyArea) {
     		return g1;
+    	}else if(g1.enemyArea == g2.enemyArea) {
+    		if(g1.myArea < g2.myArea) {
+    			return g1;
+    		} else if(g1.myArea == g2.myArea) {
+    			if(g1.scale > 0.5) {
+    				if(g1.myMoves < g2.myMoves) return g1;
+    			}else {
+    				if(g1.enemyMoves > g2.enemyMoves) return g1; 
+    			}
+    		}
+    		return g2;
+    	}else if(g1.enemyArea < g2.enemyArea) {
+    		if(g1.enemyArea > g1.myArea) return g1; 
     	}
-    		
     	return g2;
     }
    
@@ -401,21 +428,10 @@ public class RecursiveAI extends Board {
 	    					
 	    					//DEBUGG
 	    					
-//	    					System.out.println("VALUE %: " + val2p);
-//	    					System.out.println("ADDING QUEEN");
-//		    				System.out.println("Total moves before = " + sumBefore);
-//		    				System.out.println("Total moves  after= " + sumAfter);
-//		    				System.out.println("Restricted move moves = " + (sumBefore - sumAfter));
-//		    				System.out.println("New node to add is:" 
-//		    											+ "\n-> Old Queen: " + Arrays.deepToString(queenCurr.get(f).toArray())
-//		    											+ "\n-> New Queen: " + Arrays.deepToString(newQueen.toArray())
-//		    											+ "\n-> New Arrow: " + Arrays.deepToString(newArrow.toArray())
-//		    											+ "\n-> enemyMoves: " + sumAfter + " - Before : " + sumBefore
-//		    											+ "\n-> myMoves: " + sumOurs + " - Before : " + sumB
-//		    											+ "\n-> enemyMoves%: " + val1p
-//		    											+ "\n-> myMoves%: " + val2p
-//		    											+ "\n-> Board: " + brd2.toString()
-//		    									);
+//	    			
+	    					int myArea = BFS(brd2, our);
+	    					int enemyArea = BFS(brd2, opp);
+	    					
 	    					NodeGraph temp;
 	    					if(colour == this.playerColour) {
 	    						double val1p = sumBefore - sumAfter;
@@ -423,8 +439,28 @@ public class RecursiveAI extends Board {
 		    		
 		    					double val2p = sumOurs-sumB;
 		    					val2p = val2p * 100 / sumB;
+		    					
+		    					
 		    					temp = new NodeGraph(queenCurr.get(f), newQueen, newArrow, sumAfter, sumOurs, 
-		    									val1p, val2p, brd2, depth, scale);
+		    									val1p, val2p, brd2, depth, scale, enemyArea, myArea);
+		    					
+		    					
+//		    					System.out.println("ADDING QUEEN");
+//			    				System.out.println("Total moves before = " + sumBefore);
+//			    				System.out.println("Total moves  after= " + sumAfter);
+//			    				System.out.println("Restricted move moves = " + (sumBefore - sumAfter));
+//			    				System.out.println("New node to add is:" 
+//			    											+ "\n-> Old Queen: " + Arrays.deepToString(queenCurr.get(f).toArray())
+//			    											+ "\n-> New Queen: " + Arrays.deepToString(newQueen.toArray())
+//			    											+ "\n-> New Arrow: " + Arrays.deepToString(newArrow.toArray())
+//			    											+ "\n-> enemyMoves: " + sumAfter + " - Before : " + sumBefore
+//			    											+ "\n-> myMoves: " + sumOurs + " - Before : " + sumB
+//			    											+ "\n-> enemyMoves%: " + val1p
+//			    											+ "\n-> myMoves%: " + val2p
+//			    											+ "\n Area: " + myArea
+//			    											+ "\n Enemy Area: " + enemyArea
+//			    											+ "\n-> Board: " + brd2.toString()
+//			    									);
 		    					
 	    					} else {
 	    						double val1p = sumAfter - sumBefore;
@@ -432,8 +468,12 @@ public class RecursiveAI extends Board {
 		    		
 		    					double val2p = sumB-sumOurs;
 		    					val2p = val2p * 100 / sumB;
+		    					
 	    						temp = new NodeGraph(queenCurr.get(f), newQueen, newArrow, sumOurs, sumAfter, 
-    											val2p, val1p, brd2, depth, scale);
+    											val2p, val1p, brd2, depth, scale, myArea, enemyArea);
+	    						
+	    						
+		    					
 	    					}
 	    					
 	    					branching.add(temp);
@@ -452,6 +492,41 @@ public class RecursiveAI extends Board {
     	return branching;
    }
     
+    public int BFS(Board b, ArrayList<ArrayList<Integer>> loc) {
+    	boolean[][] visited = new boolean[10][10];
+    	LinkedList<ArrayList<Integer>> queue = new LinkedList<ArrayList<Integer>>();
+    	int counter = 0;
+    	ArrayList<Integer> current;
+    	
+    	for(int i = 0; i < loc.size(); i++) {
+    		ArrayList<Integer> queen = loc.get(i);
+//    		System.out.println("Start queen loc: \n" + Arrays.deepToString(queen.toArray()));
+    		visited[queen.get(0) - 1][queen.get(1) - 1] = true;
+    		queue.add(queen);
+    		
+    		while(queue.size() != 0) {
+    			current = queue.poll();
+    			for(int j = -1; j <= 1; j++) {
+    				for(int k = -1; k <= 1; k++) {
+    					int row = current.get(0) + j;
+    					int column = current.get(1) + k;
+//    					System.out.println("TO CHECK [" + row +  "][" + column + "]");
+    					if(row >= 1 && row <= 10 && column >= 1  && column <= 10 && !visited[row - 1][column -1] 
+    							&& b.getTile(row, column) == b.POS_AVAILABLE){
+    						visited[row - 1][column - 1] = true;
+    						counter++;
+    						ArrayList<Integer> toAdd = new ArrayList<Integer>(Arrays.asList(row, column));
+    						queue.add(toAdd);
+    					}
+    				}
+    			}
+    			
+    		}
+    		
+    	}
+    	
+    	return counter;
+    }
     
    /** Method to provide coordinates of a new position based on provided original position, 
     * and how far to move in a given direction.
