@@ -212,7 +212,7 @@ public class RecursiveAI extends Board {
 //	    		if(best.value > alpha.value) { alpha = best;}
 	    		best = conditionalMax(val, best);
 	    		alpha = conditionalMax(best, alpha);
-	    		if(beta.value <= alpha.value) { break;}	    		
+	    		if(beta.myArea <= alpha.myArea) { break;}	    		
     		}
     		//System.out.println("ALPHA BEST: " + alpha.value);
 //    		System.out.println("\n Name: " + best.name);
@@ -234,7 +234,7 @@ public class RecursiveAI extends Board {
 //	    		if(best.value < beta.value) { beta = best;}-
 	    		best = conditionalMin(val, best);
 	    		beta = conditionalMin(best, beta);
-	    		if(beta.value <= alpha.value) { break;}
+	    		if(beta.myArea <= alpha.myArea) { break;}
     		}
 //    		System.out.println("BETA BEST: " + alpha.value);
 //    		System.out.println("\n Name: " + best.name);
