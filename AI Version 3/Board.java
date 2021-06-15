@@ -122,34 +122,39 @@ public class Board {
 	* @param colour
 	*/
 	public boolean checkWin() {
-		if (!win) {
+		if (!this.win) {
 			ArrayList<ArrayList<Integer>> bpieces = this.getPositions(POS_BLACK);
 			ArrayList<ArrayList<Integer>> wpieces = this.getPositions(POS_WHITE);
-			
+			int sum1 = 0;
+			int sum2 = 0;
 			for(int i = 0; i < 4; i++) {
 				ArrayList<Integer> moves = move.getMoves(this, bpieces.get(i));
 				for (int j = 0; j < 8; j++) {
-					if (moves.get(j) > 0)
-						return false;
+					sum1 += moves.get(j);
 				}
 			}
-			win = true;
-			winner = "White";
-			System.out.println("\nWinner is: White----\n");
+			if (sum1 == 0) {
+				this.win = true;
+				this.winner = "White";
+				System.out.println("\n\t----Winner is: White----\n");
+				return true;
+			}
 			
 			for(int i = 0; i < 4; i++) {
 				ArrayList<Integer> moves = move.getMoves(this, wpieces.get(i));
 				for (int j = 0; j < 8; j++) {
-					if (moves.get(j) > 0)
-						return false;
+					sum2 += moves.get(j);
 				}
 			}
-			win = true;
-			winner = "Black";
-			System.out.println("\nWinner is: Black----\n");
+			if (sum2 == 0) {
+				this.win = true;
+				this.winner = "Black";
+				System.out.println("\n\t----Winner is: Black----\n");
+				return true;
+			}else return false;
 		}	
-		System.out.println("\nWinner is: "+ winner + "----\n");
-		return win;
+		System.out.println("\n\t----Winner is: "+ this.winner + "----\n");
+		return true;
 	}
 	
    /** Method to move piece based on provided start and finish coordinates

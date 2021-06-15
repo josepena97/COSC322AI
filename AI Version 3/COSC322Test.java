@@ -34,6 +34,7 @@ public class COSC322Test extends GamePlayer{
     private int myColour;
     private int oppColour;
     private int count;
+    private boolean end = false;
 	
     /**
      * The main method
@@ -143,7 +144,7 @@ public class COSC322Test extends GamePlayer{
     			this.myColour = myBoard.POS_BLACK;
     			this.oppColour = myBoard.POS_WHITE;
 //    			ArrayList<Integer> play = myBoard.randomMove(myColour);
-    			this.player = new RecursiveAI(myBoard);
+    			this.player = new RecursiveAI(myBoard); //add count
     			ArrayList<Integer> play = player.ai(myColour, count);
     			ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
 				ArrayList<Integer> newQueen = new ArrayList<Integer>(Arrays.asList(play.get(2), play.get(3)));
@@ -158,7 +159,7 @@ public class COSC322Test extends GamePlayer{
     		}
         }
     	else if(messageType.compareTo(GameMessage.GAME_ACTION_MOVE)==0) {
-    		if (!myBoard.checkWin()) {
+    		if (!end) {
     			if(this.moving) {
 	    			ArrayList<Integer> queenCurr = 
 	    					(ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);    		
@@ -173,10 +174,11 @@ public class COSC322Test extends GamePlayer{
 		    		myBoard.movePiece(queenCurr, queenNext, arrow, oppColour);
 		    		this.moving = false;
 		    		this.gamegui.updateGameState(msgDetails);
+		    		end = myBoard.checkWin();
 	    		}
     		}
-    		if (!myBoard.checkWin()) {
-	    		this.player = new RecursiveAI(myBoard);
+    		if (!end) {
+	    		this.player = new RecursiveAI(myBoard); //add count
 	//	    	ArrayList<Integer> play = myBoard.randomMove(myColour);
 		    	ArrayList<Integer> play = player.ai(myColour, count);
 		    	ArrayList<Integer> oldQueen = new ArrayList<Integer>(Arrays.asList(play.get(0), play.get(1)));
@@ -191,7 +193,7 @@ public class COSC322Test extends GamePlayer{
 		    	sendPlay(play.get(0), play.get(1), play.get(2), play.get(3), play.get(4), play.get(5));
 		    	System.out.println(myBoard.toString());
 		    	this.moving = true;
-		    	myBoard.checkWin();
+		    	end = myBoard.checkWin();
     		}
     	}    	    	
     	return true;   	
